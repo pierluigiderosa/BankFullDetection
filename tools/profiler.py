@@ -1,7 +1,7 @@
 import math
 from osgeo import ogr,_ogr
 from qgis.core import QgsPoint,QgsRaster,QgsRectangle
-from BankFullDetection.utils import log
+#from BankFullDetection.utils import log
 
 
 class ProfilerTool():
@@ -12,6 +12,10 @@ class ProfilerTool():
         self.identifyFormat = QgsRaster.IdentifyFormatValue
         self.identifyRect = QgsRectangle()
         
+    def log(msg):
+        logger = QgsMessageLog.instance()
+        logger.logMessage(msg,'Bankfull')
+
     def setRaster(self,raster):
         self.raster = raster
         self.rextent = raster.extent()
@@ -29,7 +33,7 @@ class ProfilerTool():
             try:
                 ogrgeom.Segmentize(self.rasterPixelSize)
                 points = ogrgeom.GetPoints()
-                log('Numero punti: %s' % len(points))
+#                log('Numero punti: %s' % len(points))
                 i = 0
                 for point in points:
                     #log('X: %s' % point[0])
@@ -44,9 +48,10 @@ class ProfilerTool():
                                 dist += math.sqrt(prevPoint.sqrDist(p))
                             prevPoint = QgsPoint(p)
                             val = results[1]
-                            profile.append({'x':point[0],'y':point[1],'dist':dist,'z':val})
+                            profile.append((dist,val))
+#                            profile.append({'x':point[0],'y':point[1],'dist':dist,'z':val})
                         identifyresult = None
-                log('Punti processati: %s' % i)
+#                log('Punti processati: %s' % i)
             except Exception,e:
                 err = e
         else:

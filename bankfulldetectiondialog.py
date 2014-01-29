@@ -25,6 +25,8 @@ from PyQt4.QtGui import *
 from ui_bankfulldetection import Ui_BankFullDetection
 from qgis.core import *
 from tools.XSGenerator import *
+from tools.profiler import ProfilerTool
+from tools.BankElevationDetection import mainFun
 # create the dialog for zoom to point
 
 
@@ -41,9 +43,14 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
         self.iface = iface
         self.setup_gui()
         
+        #general variables
+        self.vLayer = None
+        self.rLayer = None
+        
         #~ connections
         #~ self.iface.clicked.connect(self.runXS)
         QObject.connect(self.genXSbtn, SIGNAL( "clicked()" ), self.genXS)
+        QObject.connect(self.buttonBox, SIGNAL( "accepted()" ), self.runProfile)
 
 
     def setup_gui(self):
@@ -51,24 +58,75 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
         self.comboVector.clear()
         self.comboDEM.clear()
         curr_map_layers = QgsMapLayerRegistry.instance().mapLayers()
-        layerRaster = []
-        layerVector = []
+        layerRasters = []
+        layerVectors = []
         for name, layer in QgsMapLayerRegistry.instance().mapLayers().iteritems():
             if layer.type() == QgsMapLayer.VectorLayer:
-                layerVector.append(unicode(layer.name()))
+                layerVectors.append(unicode(layer.name()))
             elif layer.type() == QgsMapLayer.RasterLayer:
-                layerRaster.append(unicode(layer.name()))
-        self.comboDEM.addItems( layerRaster  )
-        self.comboVector.addItems( layerVector )
+                layerRasters.append(unicode(layer.name()))
+        self.comboDEM.addItems( layerRasters  )
+        self.comboVector.addItems( layerVectors )
         
+    def getLayerByName(self,LayerName):
+        curr_map_layers = QgsMapLayerRegistry.instance().mapLayers()
+        for name, layer in curr_map_layers.iteritems():
+            if unicode(layer.name() ) == LayerName:
+                return layer
 
+                
     def genXS(self):
-        layer=iface.mapCanvas().currentLayer()
+        vectorName = self.comboVector.currentText()
+        layer = self.getLayerByName(vectorName)
         step=self.stepXSspin.value()
         width=self.widthXSspin.value()
         #~ message(str(step))
-       
         create_points_secs(layer,step,width)
-                
 
-      
+                
+    def runProfile(self):
+        rasterName = self.comboDEM.currentText()
+        self.rLayer = self.getLayerByName(rasterName)
+        XSlayer = self.getLayerByName('Sezioni')
+        profiler = ProfilerTool()
+        profiler.setRaster( self.rLayer )
+        leftPoints = []
+        rightPoints = []
+        ringPoints = []
+        #~ feats = XSlayer.selectedFeatures()
+        for feat in XSlayer.getFeatures():
+            #~ feat = feats[0]
+            geom = feat.geometry()
+            profileList,e = profiler.doProfile(geom)
+            startDis, endDis = mainFun(profileList)
+            
+            StartPoint = geom.interpolate( startDis)
+            EndPoint = geom.interpolate(endDis)
+            
+            leftPoints.append(StartPoint.asPoint() )
+            rightPoints.append(EndPoint.asPoint() )
+            #~ rightPoints.reverse()
+            ringPoints = leftPoints+rightPoints[::-1]
+        
+        vl = QgsVectorLayer("Polygon", "output finale", "memory")
+        pr = vl.dataProvider()
+        fet = QgsFeature()
+        fet.setGeometry( QgsGeometry.fromPolygon( [ ringPoints ] ) )
+        pr.addFeatures( [fet] )
+        QgsMapLayerRegistry.instance().addMapLayer(vl)
+        
+        #~ QMessageBox.warning(self.iface.mainWindow(),"BankFullDetection",str(ringPoints) )
+        
+        #~ debugging
+        #~ punto = QgsVectorLayer("Point", "output finale", "memory")
+        #~ punto_prov = punto.dataProvider()
+        #~ features = []
+        #~ for j in ringPoints:
+            #~ fet= QgsFeature()
+            #~ fet.setGeometry( QgsGeometry.fromPoint( j ) )
+            #~ features.append(fet)
+        #~ punto_prov.addFeatures( features )
+        #~ QgsMapLayerRegistry.instance().addMapLayer(punto)
+        
+
+

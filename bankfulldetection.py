@@ -27,7 +27,6 @@ from qgis.core import *
 import resources_rc
 # Import the code for the dialog
 from bankfulldetectiondialog import BankFullDetectionDialog
-from tools.profiler import ProfilerTool
 import os.path
 
 
@@ -86,10 +85,4 @@ class BankFullDetection:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result == 1:
-            # do something useful (delete the line containing pass and
-            # substitute with your code)
-            #~ pointsAlongLine(500)
-
-            self.profiler = ProfilerTool()
-            self.profiler.setRaster(self.iface.activeLayer())
-            #~ pass
+            pass

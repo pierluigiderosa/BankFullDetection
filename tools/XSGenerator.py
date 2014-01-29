@@ -95,6 +95,7 @@ def create_points_secs(layer,step=1000,sez_length=1000):
         
             #~ pt_mid.loadme()
             sez.loadme()
+            return sez
             
 def get_profile_seg(p0,p1,mid,length):
         '''
