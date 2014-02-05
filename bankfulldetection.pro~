@@ -1,0 +1,9 @@
+SOURCES = __init__.py \
+          bankfulldetection.py \
+          bankfulldetectiondialog.py \
+          tool/BankElevationDetection.py \
+          tool/XSGenerator.py
+
+FORMS = ui_bankfulldetection.ui
+
+TRANSLATIONS = i18n/bankfulldetection_it.ts

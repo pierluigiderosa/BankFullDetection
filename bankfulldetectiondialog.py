@@ -42,6 +42,8 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
         self.setupUi(self)
         self.iface = iface
         self.setup_gui()
+
+        self.progressBar.setValue(0)
         
         #general variables
         self.vLayer = None
@@ -50,7 +52,7 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
         #~ connections
         #~ self.iface.clicked.connect(self.runXS)
         QObject.connect(self.genXSbtn, SIGNAL( "clicked()" ), self.genXS)
-        QObject.connect(self.buttonBox, SIGNAL( "accepted()" ), self.runProfile)
+        QObject.connect(self.buttonProf, SIGNAL( "clicked()" ), self.runProfile)
 
 
     def setup_gui(self):
@@ -60,7 +62,7 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
         curr_map_layers = QgsMapLayerRegistry.instance().mapLayers()
         layerRasters = []
         layerVectors = []
-        for name, layer in QgsMapLayerRegistry.instance().mapLayers().iteritems():
+        for name, layer in curr_map_layers.iteritems():
             if layer.type() == QgsMapLayer.VectorLayer:
                 layerVectors.append(unicode(layer.name()))
             elif layer.type() == QgsMapLayer.RasterLayer:
@@ -69,10 +71,8 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
         self.comboVector.addItems( layerVectors )
         
     def getLayerByName(self,LayerName):
-        curr_map_layers = QgsMapLayerRegistry.instance().mapLayers()
-        for name, layer in curr_map_layers.iteritems():
-            if unicode(layer.name() ) == LayerName:
-                return layer
+        layer = QgsMapLayerRegistry.instance().mapLayersByName(LayerName)[0]
+        return layer
 
                 
     def genXS(self):
@@ -85,20 +85,27 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
 
                 
     def runProfile(self):
+        self.progressBar.show()
+        
         rasterName = self.comboDEM.currentText()
         self.rLayer = self.getLayerByName(rasterName)
-        XSlayer = self.getLayerByName('Sezioni')
+        XSlayer = self.getLayerByName(str(QCoreApplication.translate( "dialog","Sezioni")))
         profiler = ProfilerTool()
         profiler.setRaster( self.rLayer )
         leftPoints = []
         rightPoints = []
         ringPoints = []
-        #~ feats = XSlayer.selectedFeatures()
+        nfeats = int( XSlayer.featureCount() )
+        self.progressBar.setMaximum(nfeats)
+        i = 0
+        self.progressBar.setValue(i)
+        nVsteps = self.nVsteps.value()
+        minVdep = self.minVdep.value()
         for feat in XSlayer.getFeatures():
             #~ feat = feats[0]
             geom = feat.geometry()
             profileList,e = profiler.doProfile(geom)
-            startDis, endDis = mainFun(profileList)
+            startDis, endDis = mainFun(profileList,nVsteps,minVdep)
             
             StartPoint = geom.interpolate( startDis)
             EndPoint = geom.interpolate(endDis)
@@ -107,6 +114,8 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
             rightPoints.append(EndPoint.asPoint() )
             #~ rightPoints.reverse()
             ringPoints = leftPoints+rightPoints[::-1]
+            i = i +1 
+            self.progressBar.setValue(i)
         
         vl = QgsVectorLayer("Polygon", "output finale", "memory")
         pr = vl.dataProvider()

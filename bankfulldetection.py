@@ -82,7 +82,7 @@ class BankFullDetection:
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
-        result = self.dlg.exec_()
+        #~ self.dlg.exec_()
         # See if OK was pressed
-        if result == 1:
-            pass
+        #~ if result == 1:
+            #~ pass

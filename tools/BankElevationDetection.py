@@ -56,7 +56,7 @@ def local_maxmin(Harray):
     turning_points = {'maxima_number':maxima_num,'minima_number':minima_num,'maxima_locations':max_locations,'minima_locations':min_locations}  
     return turning_points
 
-def mainFun(pointList):
+def mainFun(pointList,nVsteps=100,minVdep=1):
     polygonXSorig = Polygon(pointList)
     #~ definition line of XS
     borderXS = LineString(pointList)
@@ -68,7 +68,7 @@ def mainFun(pointList):
     pointList.append((polygonXSorig.bounds[2],maxY+1))
     polygonXS = Polygon(pointList)
     
-    depts = np.linspace(minY+0.1, maxY-0.1, 50)
+    depts = np.linspace(minY+0.1, maxY-0.1, nVsteps)
     
     HydRad = np.array([])
     HydDept = np.array([])
@@ -81,10 +81,13 @@ def mainFun(pointList):
         HydRad = np.append(HydRad,wetArea.area/wetPerimeter.length)
         HydDept = np.append(HydDept,wetArea.area/wetWTLine.length)
     
-    #~ first maxima location of HydDept
+    #~ find maxima location of HydDept
     turning_points = local_maxmin(HydDept)
-    if len(turning_points['maxima_locations'])>0:
-        bankfullIndex = turning_points['maxima_locations'][0]
+    if turning_points['maxima_number']>0:
+        #~ skip local maxima_locations if lower then value set by user
+        
+        max_loc_filtered = [i for i in turning_points['maxima_locations'] if HydDept[i] > minVdep]    
+        bankfullIndex = max_loc_filtered[0]
         bankfullLine = WTable(polygonXSorig,depts[bankfullIndex])
         wdep=hdepth(polygonXSorig,depts[bankfullIndex])
     else:

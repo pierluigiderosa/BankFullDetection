@@ -22,7 +22,7 @@
 from qgis.core import (QgsFeature, QgsGeometry,
                         QgsVectorLayer, QgsMapLayerRegistry,
                         QgsField)
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant,QCoreApplication
 from qgis.utils import iface
 import numpy as np
 from BankFullDetection.utils import *
@@ -70,7 +70,7 @@ def create_points_secs(layer,step=1000,sez_length=1000):
         crs = layer.crs().authid()
         if layer:
             pt_mid  = MemoryLayer("Punti sezioni", "Point",crs)
-            sez  = MemoryLayer("Sezioni", "LineString",crs)
+            sez  = MemoryLayer(str(QCoreApplication.translate( "dialog","Sezioni")), "LineString",crs)
             #pydevd.settrace()
             for elem in layer.getFeatures():
                 line = elem.geometry()
