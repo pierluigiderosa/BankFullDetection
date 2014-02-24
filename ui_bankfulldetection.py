@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_bankfulldetection.ui'
 #
-# Created: Tue Feb  4 14:25:45 2014
+# Created: Thu Feb 20 16:45:19 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ except AttributeError:
 class Ui_BankFullDetection(object):
     def setupUi(self, BankFullDetection):
         BankFullDetection.setObjectName(_fromUtf8("BankFullDetection"))
-        BankFullDetection.resize(460, 440)
+        BankFullDetection.resize(460, 488)
         self.verticalLayout_5 = QtGui.QVBoxLayout(BankFullDetection)
         self.verticalLayout_5.setObjectName(_fromUtf8("verticalLayout_5"))
         self.tabWidget = QtGui.QTabWidget(BankFullDetection)
@@ -39,7 +39,7 @@ class Ui_BankFullDetection(object):
         self.groupBox.setFlat(False)
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.groupBox)
-        self.verticalLayout_3.setContentsMargins(-1, 25, -1, -1)
+        self.verticalLayout_3.setContentsMargins(9, 25, -1, 9)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
@@ -92,6 +92,18 @@ class Ui_BankFullDetection(object):
         self.comboDEM.setObjectName(_fromUtf8("comboDEM"))
         self.horizontalLayout_3.addWidget(self.comboDEM)
         self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_5 = QtGui.QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(_fromUtf8("horizontalLayout_5"))
+        self.label_8 = QtGui.QLabel(self.groupBox_2)
+        self.label_8.setObjectName(_fromUtf8("label_8"))
+        self.horizontalLayout_5.addWidget(self.label_8)
+        self.ShpSaveLine = QtGui.QLineEdit(self.groupBox_2)
+        self.ShpSaveLine.setObjectName(_fromUtf8("ShpSaveLine"))
+        self.horizontalLayout_5.addWidget(self.ShpSaveLine)
+        self.ShpSaveBtn = QtGui.QPushButton(self.groupBox_2)
+        self.ShpSaveBtn.setObjectName(_fromUtf8("ShpSaveBtn"))
+        self.horizontalLayout_5.addWidget(self.ShpSaveBtn)
+        self.verticalLayout.addLayout(self.horizontalLayout_5)
         self.buttonProf = QtGui.QPushButton(self.groupBox_2)
         self.buttonProf.setObjectName(_fromUtf8("buttonProf"))
         self.verticalLayout.addWidget(self.buttonProf)
@@ -134,9 +146,26 @@ class Ui_BankFullDetection(object):
         self.formLayout.setWidget(1, QtGui.QFormLayout.LabelRole, self.label_6)
         self.verticalLayout_2.addLayout(self.formLayout)
         self.tabWidget.addTab(self.tab_2, _fromUtf8(""))
+        self.tab_3 = QtGui.QWidget()
+        self.tab_3.setObjectName(_fromUtf8("tab_3"))
+        self.verticalLayout_6 = QtGui.QVBoxLayout(self.tab_3)
+        self.verticalLayout_6.setObjectName(_fromUtf8("verticalLayout_6"))
+        self.label_9 = QtGui.QLabel(self.tab_3)
+        self.label_9.setObjectName(_fromUtf8("label_9"))
+        self.verticalLayout_6.addWidget(self.label_9)
+        self.selXS = QtGui.QPushButton(self.tab_3)
+        self.selXS.setObjectName(_fromUtf8("selXS"))
+        self.verticalLayout_6.addWidget(self.selXS)
+        self.layout_plot = QtGui.QVBoxLayout()
+        self.layout_plot.setObjectName(_fromUtf8("layout_plot"))
+        self.widget = QtGui.QWidget(self.tab_3)
+        self.widget.setObjectName(_fromUtf8("widget"))
+        self.layout_plot.addWidget(self.widget)
+        self.verticalLayout_6.addLayout(self.layout_plot)
+        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout_6.addItem(spacerItem)
+        self.tabWidget.addTab(self.tab_3, _fromUtf8(""))
         self.verticalLayout_5.addWidget(self.tabWidget)
-        spacerItem = QtGui.QSpacerItem(20, 25, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout_5.addItem(spacerItem)
         self.buttonBox = QtGui.QDialogButtonBox(BankFullDetection)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
@@ -144,7 +173,7 @@ class Ui_BankFullDetection(object):
         self.verticalLayout_5.addWidget(self.buttonBox)
 
         self.retranslateUi(BankFullDetection)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("accepted()")), BankFullDetection.accept)
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL(_fromUtf8("rejected()")), BankFullDetection.reject)
         QtCore.QMetaObject.connectSlotsByName(BankFullDetection)
@@ -160,6 +189,8 @@ class Ui_BankFullDetection(object):
         self.genXSbtn.setText(QtGui.QApplication.translate("BankFullDetection", "Generate XS", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("BankFullDetection", "Bankfull detection", None, QtGui.QApplication.UnicodeUTF8))
         self.label_2.setText(QtGui.QApplication.translate("BankFullDetection", "DEM", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_8.setText(QtGui.QApplication.translate("BankFullDetection", "Output file", None, QtGui.QApplication.UnicodeUTF8))
+        self.ShpSaveBtn.setText(QtGui.QApplication.translate("BankFullDetection", "Browse", None, QtGui.QApplication.UnicodeUTF8))
         self.buttonProf.setText(QtGui.QApplication.translate("BankFullDetection", "Run tool", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("BankFullDetection", "Main tool", None, QtGui.QApplication.UnicodeUTF8))
         self.label_7.setText(QtGui.QApplication.translate("BankFullDetection", "Pay particolar attention when you modify this values below", None, QtGui.QApplication.UnicodeUTF8))
@@ -168,4 +199,7 @@ class Ui_BankFullDetection(object):
         self.minVdep.setSuffix(QtGui.QApplication.translate("BankFullDetection", " m", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setText(QtGui.QApplication.translate("BankFullDetection", "Minimum hydraulic depth", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("BankFullDetection", "Numerical settings", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_9.setText(QtGui.QApplication.translate("BankFullDetection", "Select one feature from XS and press Plot.", None, QtGui.QApplication.UnicodeUTF8))
+        self.selXS.setText(QtGui.QApplication.translate("BankFullDetection", "Plot", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QtGui.QApplication.translate("BankFullDetection", "Single XS analysis", None, QtGui.QApplication.UnicodeUTF8))
 

@@ -56,7 +56,7 @@ def local_maxmin(Harray):
     turning_points = {'maxima_number':maxima_num,'minima_number':minima_num,'maxima_locations':max_locations,'minima_locations':min_locations}  
     return turning_points
 
-def mainFun(pointList,nVsteps=100,minVdep=1):
+def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
     polygonXSorig = Polygon(pointList)
     #~ definition line of XS
     borderXS = LineString(pointList)
@@ -104,8 +104,56 @@ def mainFun(pointList,nVsteps=100,minVdep=1):
                 boundsOK = wetPolygon.bounds
     else:
         boundsOK = wetArea.bounds
-        
     
-    return boundsOK[0],boundsOK[2]
+    if Graph == 1:
+        #~ definition of figure for XS plot
+        from matplotlib import pyplot
+        from descartes.patch import PolygonPatch
+        from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+        
+        
+        #~ fig = pyplot.figure(1, figsize=(4,3), dpi=90)
+        fig = pyplot.figure()
+        ax = fig.add_subplot(211)
+        ax.clear()
+        #~ plot_coords(ax, borderXS,'#999999')         # plot single points on XS
+        plot_line(ax,borderXS,'#6699cc')               # plot line of XS
+        plot_line(ax,bankfullLine,'#0000F5')           # plot hor line of bankfull
+        ax.set_title('Cross Section')
+        if wetArea.type is 'MultiPolygon':
+            for wetPolygon in wetArea:
+                patch = PolygonPatch(wetPolygon, fc='#00FFCC', ec='#B8B8B8', alpha=0.5, zorder=2)
+                ax.add_patch(patch)
+        else:
+            patch = PolygonPatch(wetArea, fc='#00FFCC', ec='#B8B8B8', alpha=0.5, zorder=2)
+            ax.add_patch(patch)
+            
+        ax = fig.add_subplot(212)
+        ax.clear()
+        ax.plot(depts,HydDept,'bo')
+        ax.plot(depts[bankfullIndex],HydDept[bankfullIndex],'rs')
+        ax.set_title('height hydraulic')
+        
+        #~ pyplot.show()
+        canvas = FigureCanvas(fig)
+        canvas.updateGeometry()
+        
+        return canvas
 
+
+    else:
+        return boundsOK[0],boundsOK[2]
+
+def plot_coords(ax, ob,Ncolor):
+    x, y = ob.xy
+    ax.plot(x, y, 'o', color=Ncolor, zorder=1)
+
+def plot_line(ax, ob,Ncolor):
+    x, y = ob.xy
+    ax.plot(x, y, color=Ncolor, alpha=0.7, linewidth=3, solid_capstyle='round', zorder=2)
+
+def plot_lines(ax, ob,Ncolor):
+    for line in ob:
+        x, y = line.xy
+        ax.plot(x, y, color=Ncolor, alpha=0.7, linewidth=3, solid_capstyle='round', zorder=2)
 
