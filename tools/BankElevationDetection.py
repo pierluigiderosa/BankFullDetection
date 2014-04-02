@@ -28,6 +28,8 @@ from shapely.geometry import box
 from shapely.geometry import LineString
 import numpy as np
 
+from spline_withR import runAlg as splineR
+
 def WTable(polygon,h):
     minx, miny, maxx, maxy=polygon.bounds
     WTLine = LineString([(minx,h),(maxx,h)])
@@ -108,6 +110,8 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
         HydDept = np.append(HydDept,wetArea.area/wetWTLine.length)
     
     #smoothing function
+    #estract local maxima of HydDept and depts using smoothing function in R
+    deptsLM, HydDeptLM  = splineR(depts,HydDept)
     from scipy.interpolate import UnivariateSpline
     splHydDept= UnivariateSpline(depts, HydDept)
     splHydDept.set_smoothing_factor(0.01)
@@ -119,10 +123,10 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
     #~ first maxima location of HydDept
     turning_points = local_maxmin(HydDept_smth)
 
-    if turning_points['maxima_number']>0:
+    if len(deptsLM)>0:
         #~ skip local maxima_locations if lower then value set by user
         #~ previous method now replaced
-        max_loc_filtered = [i for i in turning_points['maxima_locations'] if HydDept[i] > minVdep] 
+        max_loc_filtered = [i for i in range(len(HydDeptLM)) if HydDeptLM[i] >= minVdep] 
         #~ new method
         #~ max_loc_filtered = [] 
         #~ for i in range(len(turning_points['maxima_locations'])):
@@ -131,8 +135,8 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
         #~ max_loc_filtered = [i for i in max_loc_filtered if HydDept[i] > minVdep] 
         #~ --
         bankfullIndex = max_loc_filtered[0]
-        bankfullLine = WTable(polygonXSorig,depts[bankfullIndex])
-        wdep=hdepth(polygonXSorig,depts[bankfullIndex])
+        bankfullLine = WTable(polygonXSorig,deptsLM[bankfullIndex])
+        wdep=hdepth(polygonXSorig,deptsLM[bankfullIndex])
     else:
         bankfullLine = WTable(polygonXSorig,depts[-1])
         wdep=hdepth(polygonXSorig,depts[-1])
@@ -175,7 +179,7 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
         ax.clear()
         ax.plot(depts,HydDept,'bo')
         ax.plot(xfine,HydDept_smthfine)
-        ax.plot(depts[bankfullIndex],HydDept[bankfullIndex],'rs')
+        ax.plot(deptsLM[bankfullIndex],HydDeptLM[bankfullIndex],'rs')
         ax.set_title('hydraulic height')
         
         #~ pyplot.show()
