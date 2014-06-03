@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui_bankfulldetection.ui'
 #
-# Created: Thu Mar 27 16:04:10 2014
+# Created: Tue Apr 15 16:48:35 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -99,13 +99,13 @@ class Ui_BankFullDetection(object):
         self.formLayout.setWidget(0, QtGui.QFormLayout.LabelRole, self.label_5)
         self.nVsteps = QtGui.QSpinBox(self.groupBox_2)
         self.nVsteps.setSuffix(_fromUtf8(""))
-        self.nVsteps.setMinimum(10)
-        self.nVsteps.setMaximum(500)
-        self.nVsteps.setProperty("value", 50)
+        self.nVsteps.setMinimum(50)
+        self.nVsteps.setMaximum(2000)
+        self.nVsteps.setProperty("value", 700)
         self.nVsteps.setObjectName(_fromUtf8("nVsteps"))
         self.formLayout.setWidget(0, QtGui.QFormLayout.FieldRole, self.nVsteps)
         self.minVdep = QtGui.QDoubleSpinBox(self.groupBox_2)
-        self.minVdep.setSingleStep(0.1)
+        self.minVdep.setSingleStep(0.05)
         self.minVdep.setProperty("value", 0.5)
         self.minVdep.setObjectName(_fromUtf8("minVdep"))
         self.formLayout.setWidget(1, QtGui.QFormLayout.FieldRole, self.minVdep)

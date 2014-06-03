@@ -110,7 +110,8 @@ class BankFullDetectionDialog(QDialog, Ui_BankFullDetection):
             #~ feat = feats[0]
             geom = feat.geometry()
             profileList,e = profiler.doProfile(geom)
-            startDis, endDis = mainFun(profileList,nVsteps,minVdep,Graph=0)
+            self.iface.mainWindow().statusBar().showMessage( "Elaboro la sez "+str(i) )
+            startDis, endDis , nChannels, XSarea, XSperimeter= mainFun(profileList,nVsteps,minVdep,Graph=0)
             
             StartPoint = geom.interpolate( startDis)
             EndPoint = geom.interpolate(endDis)

@@ -69,17 +69,16 @@ def local_maxmin(Harray):
             maxima_num+=1
             max_locations.append(count)     
             #new method
-            #~ while (diff_n(Harray,count,rank) and rank<len(Harray)):
-               #~ rank += 1
-            #~ ranks.append(rank)
+            while (diff_n(Harray,count,rank) and rank<len(Harray)):
+               rank += 1
+            ranks.append(rank)
             #--
         if ((cmp(i,0)<0) & (cmp(gradients[count],0)>0) & (i != gradients[count])):
             minima_num+=1
             min_locations.append(count)
-    turning_points = {'maxima_number':maxima_num,'minima_number':minima_num,'maxima_locations':max_locations,'minima_locations':min_locations
-    #,
+    turning_points = {'maxima_number':maxima_num,'minima_number':minima_num,'maxima_locations':max_locations,'minima_locations':min_locations,
                       #new method
-                      #'maxima_ranks': ranks
+                      'maxima_ranks': ranks
                       #--
     }  
     return turning_points
@@ -111,35 +110,45 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
     
     #smoothing function
     #estract local maxima of HydDept and depts using smoothing function in R
-    deptsLM, HydDeptLM  = splineR(depts,HydDept)
+    deptsLM, HydDeptLM , spar  = splineR(depts,HydDept)
     from scipy.interpolate import UnivariateSpline
     splHydDept= UnivariateSpline(depts, HydDept)
-    splHydDept.set_smoothing_factor(0.01)
+    splHydDept.set_smoothing_factor(spar)
     HydDept_smth=splHydDept(depts)
     
     xfine = np.linspace(min(depts),max(depts),1000)
     HydDept_smthfine= splHydDept(xfine)
     
     #~ first maxima location of HydDept
-    turning_points = local_maxmin(HydDept_smth)
 
     if len(deptsLM)>0:
         #~ skip local maxima_locations if lower then value set by user
         #~ previous method now replaced
         max_loc_filtered = [i for i in range(len(HydDeptLM)) if HydDeptLM[i] >= minVdep] 
-        #~ new method
-        #~ max_loc_filtered = [] 
-        #~ for i in range(len(turning_points['maxima_locations'])):
-            #~ if turning_points['maxima_ranks'][i] == max(turning_points['maxima_ranks'])  :
-                #~ max_loc_filtered.append(turning_points['maxima_locations'][i])  
-        #~ max_loc_filtered = [i for i in max_loc_filtered if HydDept[i] > minVdep] 
-        #~ --
+        
+        #~ shapely polygon for bankfull
         bankfullIndex = max_loc_filtered[0]
         bankfullLine = WTable(polygonXSorig,deptsLM[bankfullIndex])
         wdep=hdepth(polygonXSorig,deptsLM[bankfullIndex])
+        
+
     else:
         bankfullLine = WTable(polygonXSorig,depts[-1])
         wdep=hdepth(polygonXSorig,depts[-1])
+    
+    #~ new method
+    turning_points = local_maxmin(HydDept)
+    terrace = [] 
+    for i in range(len(turning_points['maxima_locations'])):
+        if turning_points['maxima_ranks'][i] == max(turning_points['maxima_ranks'])  :
+            terrace.append(turning_points['maxima_locations'][i])  
+    #~ max_loc_filtered = [i for i in max_loc_filtered if HydDept[i] > minVdep] 
+    #~ --
+    #~ shapely polygon for terrace
+    terraceIndex=terrace[0]
+    terraceLine=WTable(polygonXSorig,depts[terraceIndex])
+    tdep=hdepth(polygonXSorig,depts[terraceIndex])
+    tArea = polygonXS.intersection(tdep)
     
     wetArea = polygonXS.intersection(wdep)
     boundsOK = ()
@@ -165,7 +174,8 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
         ax.clear()
         #~ plot_coords(ax, borderXS,'#999999')         # plot single points on XS
         plot_line(ax,borderXS,'#6699cc')               # plot line of XS
-        #~ plot_line(ax,bankfullLine,'#0000F5')           # plot hor line of bankfull
+        plot_line(ax,bankfullLine,'#0000F5')           # plot hor line of bankfull
+        plot_line(ax,terraceLine,'#FFE066')           # plot hor line of terrace
         ax.set_title('Cross Section')
         if wetArea.type is 'MultiPolygon':
             for wetPolygon in wetArea:
@@ -190,7 +200,7 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
 
 
     else:
-        return boundsOK[0],boundsOK[2]
+        return boundsOK[0],boundsOK[2],len(wetArea),wetArea.area, wetArea.length
 
 def plot_coords(ax, ob,Ncolor):
     x, y = ob.xy

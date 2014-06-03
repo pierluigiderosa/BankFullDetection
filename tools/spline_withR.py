@@ -48,7 +48,7 @@ def runAlg(depts,HydDept):
               se <- apply(err, 1, function(e) sqrt(var(e)/nfold))
               est <- spar[which.min(cv.error)]
               oneserule <- (cv.error+se)[which.min(cv.error)]
-              i <- which(cv.error[which(spar >= est)] > oneserule)[1]
+              i <- which(cv.error[which(spar >= est)] <= oneserule)[1]
               est1se <- spar[spar >= est][i]
               
               if(plot)
@@ -91,7 +91,7 @@ def runAlg(depts,HydDept):
                  { folds[[i]] <- which(fold == i) }
               return(folds)
             }
-    
+        
             newtonraphson <- function (ftn, x0, tol = 0.000000001, max.iter = 100) 
             {
             # Newton-Raphson algorithm to find x such that ftn(x)[1] == 0.
@@ -106,34 +106,54 @@ def runAlg(depts,HydDept):
               }
               if(abs(fx[1]) > tol) 
                 { cat("Algorithm failed to converge\n")
-                  return(NULL)
+                  return(NA)
               }
               else { cat("Algorithm converged\n")
                      return(x)
               }
             }
             
-            cv = cv.smooth.spline(x, y,plot=F)
-            fit = smooth.spline(x, y, spar = cv$spar1se)
-            fderiv1 = predict(fit, deriv = 1)
-            # stationary points
-            candidates = x[which(diff(sign(fderiv1$y)) != 0)]
             f <- function(x) 
             { # returns function value and its derivative at x
               f1x <- predict(fit, x, deriv=1)$y
               f2x <- predict(fit, x, deriv=2)$y
               return(c(f1x, f2x))
             }
-    
+               
+            # check for convergence for newtonraphson method  
+            check=TRUE
+            while (check)
+            {
+              cv = cv.smooth.spline(x, y,plot=F)
+              fit = smooth.spline(x, y, spar = cv$spar1se)
+              # fit = smooth.spline(x, y, spar = cv$sparmin)
+              # plot(fit)
+              fderiv1 = predict(fit, deriv = 1)
+              # plot(fderiv1)
+              # stationary points
+              candidates = x[which(diff(sign(fderiv1$y)) != 0)]
+              
+              if(length(candidates) > 0)
+              { xsol = rep(NA, length(candidates))
+                for(i in 1:length(candidates))
+                { xsol[i] = newtonraphson(f, candidates[i], tol = 1e-09) }
+                xsol=xsol[!is.na(xsol)]
+                if(length(xsol)>0)
+                {
+                  local.max = xsol[which(predict(fit, xsol, deriv=2)$y < 0)]
+                  out = matrix(sapply(predict(fit, local.max), cbind), ncol = 2)
+                  check=FALSE
+                }   
+              } else 
+              { 
+                out = matrix(NA, nrow = 0, ncol = 2) 
+                check=FALSE
+              }
+            }
             
-            xsol = rep(NA, length(candidates))
-            for(i in 1:length(candidates))
-               { xsol[i] = newtonraphson(f, candidates[i], tol = 1e-09) }
-            local.max = xsol[which(predict(fit, xsol, deriv=2)$y < 0)]
-            out = sapply(predict(fit, local.max), cbind)
-            
+
             # out is a matrix of (x,y) values at each local maxima
-            return (out)
+            return(list(out,cv$spar1se))
             }
             
             ''')
@@ -141,10 +161,14 @@ def runAlg(depts,HydDept):
     
     definitiveFunc = robjects.globalenv['definitiveFunc']
     #converto gli array python in vettori R
-    out = definitiveFunc(x,y)
+    out,spar = definitiveFunc(x,y)
     
     if type(out) == robjects.vectors.FloatVector:
-        return [out[0]] , [out[1]]
+        return [out[0]] , [out[1]], spar[0]
     else:
-        return list(out.rx(True,1)) , list(out.rx(True,2))    
+        if len(out) > 0:
+            return list(out.rx(True,1)) , list(out.rx(True,2)) , spar[0]
+        else:
+            return [x[-1]],[y[-1]] , spar[0]
+    
     
