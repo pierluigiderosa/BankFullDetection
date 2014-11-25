@@ -154,12 +154,14 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
     boundsOK = ()
     Area = 0
     if wetArea.type is 'MultiPolygon':
+        nchannel=str(len(wetArea))
         for wetPolygon in wetArea:
             if wetPolygon.area > Area:
                 Area = wetPolygon.area
                 boundsOK = wetPolygon.bounds
     else:
         boundsOK = wetArea.bounds
+        nchannel='1'
     
     if Graph == 1:
         #~ definition of figure for XS plot
@@ -175,7 +177,7 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
         #~ plot_coords(ax, borderXS,'#999999')         # plot single points on XS
         plot_line(ax,borderXS,'#6699cc')               # plot line of XS
         plot_line(ax,bankfullLine,'#0000F5')           # plot hor line of bankfull
-        plot_line(ax,terraceLine,'#FFE066')           # plot hor line of terrace
+        #~ plot_line(ax,terraceLine,'#FFE066')           # plot hor line of terrace
         ax.set_title('Cross Section')
         if wetArea.type is 'MultiPolygon':
             for wetPolygon in wetArea:
@@ -190,7 +192,7 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
         ax.plot(depts,HydDept,'bo')
         ax.plot(xfine,HydDept_smthfine)
         ax.plot(deptsLM[bankfullIndex],HydDeptLM[bankfullIndex],'rs')
-        ax.set_title('hydraulic height')
+        ax.set_title('hydraulic depth')
         
         #~ pyplot.show()
         canvas = FigureCanvas(fig)
@@ -200,7 +202,22 @@ def mainFun(pointList,nVsteps=100,minVdep=1,Graph=0):
 
 
     else:
-        return boundsOK[0],boundsOK[2],len(wetArea),wetArea.area, wetArea.length
+        #~ write some useful information to csv file
+        filecsv = open("/tmp/test.csv","a")
+        filecsv.write(str(wetArea.bounds[2]-wetArea.bounds[0]))     #bankfull width
+        filecsv.write(',')                              
+        filecsv.write(nchannel)                     #n channels
+        filecsv.write(',')
+        filecsv.write(str(wetArea.area))                     #Area
+        filecsv.write(',')
+        filecsv.write(str(wetArea.length))                   #Perimeter
+        filecsv.write(',')
+        filecsv.write(str(wetArea.bounds[1]))                #min height
+        filecsv.write(',')
+        filecsv.write(str(wetArea.bounds[3]))                #min height
+        filecsv.write('\n')
+        
+        return boundsOK[0],boundsOK[2] #,len(wetArea),wetArea.area, wetArea.length
 
 def plot_coords(ax, ob,Ncolor):
     x, y = ob.xy
