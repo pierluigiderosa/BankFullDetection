@@ -21,3 +21,11 @@ Nessun virtualenv. Strumenti di sviluppo (pytest, ruff) installati con `pip inst
 - `qgis.core` non è importabile dalla console di PyCharm: è previsto. Il core e i suoi test
   non devono importare `qgis`. Il plugin si prova dentro QGIS con Plugin Reloader.
 - Comando per i test: `& "C:\Program Files\QGIS 3.34.7\apps\Python312\python.exe" -m pytest -q`
+
+## R (solo per generare i dati golden)
+`C:\Program Files\R\R-4.6.2\bin\Rscript.exe` (R 4.6.2, installazione standard da CRAN)
+
+- Usato solo dagli script in `golden_tools/` per produrre i riferimenti in `tests/data/golden/`.
+- Servono solo le funzioni base di R (`smooth.spline`, `predict`): nessun pacchetto aggiuntivo.
+- Il plugin e il core non usano R in nessun caso.
+- Comando: `& "C:\Program Files\R\R-4.6.2\bin\Rscript.exe" golden_tools\run_golden.R`
