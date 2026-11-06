@@ -1,4 +1,4 @@
-# BankFullDetection – porting a QGIS 3 (3.40 LTR e successive 3.x)
+# BankFullDetection – porting a QGIS 3 (3.34 – 3.44)
 
 ## Contesto
 Plugin QGIS per l'individuazione automatica del livello di bankfull da sezioni trasversali su DTM
@@ -22,7 +22,7 @@ Riferimenti esterni (SOLO lettura, non modificarli, non copiarli alla cieca):
 ## Obiettivo
 1. Libreria core in Python puro, SENZA dipendenze da QGIS e SENZA R: `bankfull_core/`.
 2. Plugin QGIS sottile che usa il core: dialogo + (in seguito) algoritmo Processing.
-3. Target: QGIS 3.40 e 3.44 (Qt5, Python 3). QGIS 4 non è un obiettivo per ora.
+3. Target: QGIS 3.34 (minimo, è la versione di sviluppo) fino a 3.44 (Qt5, Python 3.12). QGIS 4 non è un obiettivo per ora.
 
 ## Vincoli tassativi
 - Nessun `rpy2`, nessuna chiamata a R/Rscript. Lo smoothing va fatto con numpy/scipy.
@@ -58,6 +58,15 @@ plugin/  (o radice del plugin)
   il test in QGIS lo faccio io e ti riporto gli errori del log.
 - Commenti e docstring in inglese, messaggi a me in italiano.
 
+## Ambiente
+- Interprete: il Python incluso in QGIS 3 (percorso esatto e versioni delle librerie in `docs/ambiente.md`).
+  Stesse librerie che userà il plugin: numpy, scipy, shapely, matplotlib, PyQGIS.
+- Non installare pacchetti nel Python di QGIS senza chiedermelo.
+- Il core deve funzionare con le versioni di libreria presenti in QGIS: non usare funzioni più recenti
+  di quelle disponibili (controlla `docs/ambiente.md`).
+- Il core e i suoi test non importano `qgis`: devono girare con il solo interprete, senza avviare QGIS.
+
 ## Comandi
-- Test core: `pytest -q`
-- Lint: `ruff check .`
+- Usa sempre l'interprete di QGIS indicato in `docs/ambiente.md` (non il `python` di sistema).
+- Test core: `<python di QGIS> -m pytest -q`
+- Lint: `<python di QGIS> -m ruff check .`
