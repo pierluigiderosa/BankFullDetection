@@ -5,6 +5,8 @@ import os
 from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
+from .alg_generate_sections import GenerateSectionsAlgorithm
+
 #: Provider id: algorithms are addressed as "bankfulldetection:<algorithm name>".
 PROVIDER_ID = "bankfulldetection"
 
@@ -29,4 +31,4 @@ class BankfullProvider(QgsProcessingProvider):
         return QIcon(self._icon_path)
 
     def loadAlgorithms(self):
-        """Register the algorithms (none yet: they are added in the next steps)."""
+        self.addAlgorithm(GenerateSectionsAlgorithm())
