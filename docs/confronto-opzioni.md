@@ -16,135 +16,137 @@ Generato da `analysis/compare_expert.py`; dati per riga in `docs/confronto-opzio
 
 | # | multichannel / selection / min_hyd_depth / criterio | n | errore medio | errore medio ass. | RMSE | entro 0.25 m | entro 0.50 m | senza bankfull | seed parziali | ampiezza media seed |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | thalweg / min_cv / 1.0 / first | 8 | -0.175 | 0.470 | 0.895 | 5 | 7 | 0 | 0 | 1.732 |
-| 2 | thalweg / min_cv / 2.0 / first | 8 | -0.175 | 0.470 | 0.895 | 5 | 7 | 0 | 0 | 1.732 |
-| 3 | thalweg / min_cv / 0.2 / first | 8 | -0.556 | 0.792 | 1.336 | 4 | 6 | 0 | 0 | 2.113 |
-| 4 | original / min_cv / 1.0 / first | 8 | -0.552 | 1.087 | 1.623 | 4 | 5 | 0 | 0 | 0.022 |
-| 5 | original / min_cv / 2.0 / first | 8 | -0.552 | 1.087 | 1.623 | 4 | 5 | 0 | 0 | 0.022 |
-| 6 | thalweg / min_cv / 3.0 / first | 8 | 0.584 | 1.229 | 2.001 | 3 | 5 | 0 | 0 | 0.728 |
-| 7 | original / min_cv / 3.0 / first | 8 | -0.383 | 1.254 | 1.691 | 3 | 4 | 0 | 0 | 0.021 |
-| 8 | original / one_se / 1.0 / first | 8 | -0.247 | 1.460 | 1.857 | 0 | 3 | 0 | 0 | 0.059 |
-| 9 | original / one_se / 2.0 / first | 8 | -0.247 | 1.460 | 1.857 | 0 | 3 | 0 | 0 | 0.059 |
-| 10 | original / one_se / 3.0 / first | 8 | -0.247 | 1.460 | 1.857 | 0 | 3 | 0 | 0 | 0.059 |
-| 11 | original / one_se / 0.2 / first | 8 | -0.249 | 1.462 | 1.860 | 0 | 3 | 0 | 0 | 0.697 |
-| 12 | original / min_cv / 0.2 / highest | 8 | 0.011 | 1.592 | 1.912 | 1 | 2 | 0 | 0 | 0.021 |
-| 13 | original / min_cv / 1.0 / highest | 8 | 0.011 | 1.592 | 1.912 | 1 | 2 | 0 | 0 | 0.021 |
-| 14 | original / min_cv / 2.0 / highest | 8 | 0.011 | 1.592 | 1.912 | 1 | 2 | 0 | 0 | 0.021 |
-| 15 | original / min_cv / 3.0 / highest | 8 | 0.011 | 1.592 | 1.912 | 1 | 2 | 0 | 0 | 0.021 |
-| 16 | original / min_cv / 3.0 / prominent | 8 | 0.011 | 1.592 | 1.912 | 1 | 2 | 0 | 0 | 0.021 |
-| 17 | original / one_se / 0.2 / highest | 8 | -0.042 | 1.602 | 1.918 | 0 | 2 | 0 | 0 | 0.061 |
-| 18 | original / one_se / 0.2 / prominent | 8 | -0.042 | 1.602 | 1.918 | 0 | 2 | 0 | 0 | 0.061 |
-| 19 | original / one_se / 1.0 / highest | 8 | -0.042 | 1.602 | 1.918 | 0 | 2 | 0 | 0 | 0.061 |
-| 20 | original / one_se / 1.0 / prominent | 8 | -0.042 | 1.602 | 1.918 | 0 | 2 | 0 | 0 | 0.061 |
-| 21 | original / one_se / 2.0 / highest | 8 | -0.042 | 1.602 | 1.918 | 0 | 2 | 0 | 0 | 0.061 |
-| 22 | original / one_se / 2.0 / prominent | 8 | -0.042 | 1.602 | 1.918 | 0 | 2 | 0 | 0 | 0.061 |
-| 23 | original / one_se / 3.0 / highest | 8 | -0.042 | 1.602 | 1.918 | 0 | 2 | 0 | 0 | 0.061 |
-| 24 | original / one_se / 3.0 / prominent | 8 | -0.042 | 1.602 | 1.918 | 0 | 2 | 0 | 0 | 0.061 |
-| 25 | original / min_cv / 0.2 / first | 8 | -1.220 | 1.755 | 3.176 | 4 | 5 | 0 | 0 | 0.022 |
-| 26 | original / min_cv / 0.2 / prominent | 8 | 0.250 | 1.831 | 2.297 | 1 | 2 | 0 | 0 | 0.225 |
-| 27 | original / min_cv / 1.0 / prominent | 8 | 0.250 | 1.831 | 2.297 | 1 | 2 | 0 | 0 | 0.225 |
-| 28 | original / min_cv / 2.0 / prominent | 8 | 0.250 | 1.831 | 2.297 | 1 | 2 | 0 | 0 | 0.225 |
-| 29 | thalweg / one_se / 0.2 / first | 8 | 1.417 | 2.103 | 2.745 | 2 | 3 | 0 | 0 | 1.127 |
-| 30 | thalweg / one_se / 1.0 / first | 8 | 1.417 | 2.103 | 2.745 | 2 | 3 | 0 | 0 | 1.127 |
-| 31 | thalweg / one_se / 2.0 / first | 8 | 1.417 | 2.103 | 2.745 | 2 | 3 | 0 | 0 | 1.127 |
-| 32 | thalweg / one_se / 3.0 / first | 8 | 1.417 | 2.103 | 2.745 | 2 | 3 | 0 | 0 | 1.127 |
-| 33 | thalweg / one_se / 0.2 / highest | 8 | 2.169 | 2.298 | 2.964 | 2 | 3 | 0 | 0 | 0.285 |
-| 34 | thalweg / one_se / 0.2 / prominent | 8 | 2.169 | 2.298 | 2.964 | 2 | 3 | 0 | 0 | 0.285 |
-| 35 | thalweg / one_se / 1.0 / highest | 8 | 2.169 | 2.298 | 2.964 | 2 | 3 | 0 | 0 | 0.285 |
-| 36 | thalweg / one_se / 1.0 / prominent | 8 | 2.169 | 2.298 | 2.964 | 2 | 3 | 0 | 0 | 0.285 |
-| 37 | thalweg / one_se / 2.0 / highest | 8 | 2.169 | 2.298 | 2.964 | 2 | 3 | 0 | 0 | 0.285 |
-| 38 | thalweg / one_se / 2.0 / prominent | 8 | 2.169 | 2.298 | 2.964 | 2 | 3 | 0 | 0 | 0.285 |
-| 39 | thalweg / one_se / 3.0 / highest | 8 | 2.169 | 2.298 | 2.964 | 2 | 3 | 0 | 0 | 0.285 |
-| 40 | thalweg / one_se / 3.0 / prominent | 8 | 2.169 | 2.298 | 2.964 | 2 | 3 | 0 | 0 | 0.285 |
-| 41 | thalweg / min_cv / 0.2 / highest | 8 | 2.337 | 2.374 | 3.079 | 2 | 3 | 0 | 0 | 0.254 |
-| 42 | thalweg / min_cv / 1.0 / highest | 8 | 2.337 | 2.374 | 3.079 | 2 | 3 | 0 | 0 | 0.254 |
-| 43 | thalweg / min_cv / 2.0 / highest | 8 | 2.337 | 2.374 | 3.079 | 2 | 3 | 0 | 0 | 0.254 |
-| 44 | thalweg / min_cv / 3.0 / highest | 8 | 2.337 | 2.374 | 3.079 | 2 | 3 | 0 | 0 | 0.254 |
-| 45 | thalweg / min_cv / 0.2 / prominent | 8 | 2.704 | 2.740 | 3.733 | 2 | 3 | 0 | 0 | 0.779 |
-| 46 | thalweg / min_cv / 1.0 / prominent | 8 | 2.704 | 2.740 | 3.733 | 2 | 3 | 0 | 0 | 0.779 |
-| 47 | thalweg / min_cv / 2.0 / prominent | 8 | 2.704 | 2.740 | 3.733 | 2 | 3 | 0 | 0 | 0.779 |
-| 48 | thalweg / min_cv / 3.0 / prominent | 8 | 2.704 | 2.740 | 3.733 | 2 | 3 | 0 | 0 | 0.779 |
+| 1 | thalweg / min_cv / 1.0 / first | 8 | -0.256 | 0.461 | 0.892 | 5 | 7 | 0 | 0 | 1.732 |
+| 2 | thalweg / min_cv / 2.0 / first | 8 | -0.256 | 0.461 | 0.892 | 5 | 7 | 0 | 0 | 1.732 |
+| 3 | thalweg / min_cv / 0.2 / first | 8 | -0.638 | 0.784 | 1.334 | 4 | 6 | 0 | 0 | 2.113 |
+| 4 | original / min_cv / 1.0 / first | 8 | -0.633 | 1.168 | 1.651 | 3 | 4 | 0 | 0 | 0.022 |
+| 5 | original / min_cv / 2.0 / first | 8 | -0.633 | 1.168 | 1.651 | 3 | 4 | 0 | 0 | 0.022 |
+| 6 | thalweg / min_cv / 3.0 / first | 8 | 0.503 | 1.221 | 2.000 | 3 | 5 | 0 | 0 | 0.728 |
+| 7 | original / min_cv / 3.0 / first | 8 | -0.464 | 1.336 | 1.718 | 2 | 3 | 0 | 0 | 0.021 |
+| 8 | original / one_se / 1.0 / first | 8 | -0.328 | 1.542 | 1.883 | 0 | 2 | 0 | 0 | 0.059 |
+| 9 | original / one_se / 2.0 / first | 8 | -0.328 | 1.542 | 1.883 | 0 | 2 | 0 | 0 | 0.059 |
+| 10 | original / one_se / 3.0 / first | 8 | -0.328 | 1.542 | 1.883 | 0 | 2 | 0 | 0 | 0.059 |
+| 11 | original / one_se / 0.2 / first | 8 | -0.330 | 1.544 | 1.886 | 0 | 2 | 0 | 0 | 0.697 |
+| 12 | original / min_cv / 0.2 / highest | 8 | -0.070 | 1.673 | 1.936 | 0 | 1 | 0 | 0 | 0.021 |
+| 13 | original / min_cv / 1.0 / highest | 8 | -0.070 | 1.673 | 1.936 | 0 | 1 | 0 | 0 | 0.021 |
+| 14 | original / min_cv / 2.0 / highest | 8 | -0.070 | 1.673 | 1.936 | 0 | 1 | 0 | 0 | 0.021 |
+| 15 | original / min_cv / 3.0 / highest | 8 | -0.070 | 1.673 | 1.936 | 0 | 1 | 0 | 0 | 0.021 |
+| 16 | original / min_cv / 3.0 / prominent | 8 | -0.070 | 1.673 | 1.936 | 0 | 1 | 0 | 0 | 0.021 |
+| 17 | original / one_se / 0.2 / highest | 8 | -0.124 | 1.683 | 1.943 | 0 | 1 | 0 | 0 | 0.061 |
+| 18 | original / one_se / 0.2 / prominent | 8 | -0.124 | 1.683 | 1.943 | 0 | 1 | 0 | 0 | 0.061 |
+| 19 | original / one_se / 1.0 / highest | 8 | -0.124 | 1.683 | 1.943 | 0 | 1 | 0 | 0 | 0.061 |
+| 20 | original / one_se / 1.0 / prominent | 8 | -0.124 | 1.683 | 1.943 | 0 | 1 | 0 | 0 | 0.061 |
+| 21 | original / one_se / 2.0 / highest | 8 | -0.124 | 1.683 | 1.943 | 0 | 1 | 0 | 0 | 0.061 |
+| 22 | original / one_se / 2.0 / prominent | 8 | -0.124 | 1.683 | 1.943 | 0 | 1 | 0 | 0 | 0.061 |
+| 23 | original / one_se / 3.0 / highest | 8 | -0.124 | 1.683 | 1.943 | 0 | 1 | 0 | 0 | 0.061 |
+| 24 | original / one_se / 3.0 / prominent | 8 | -0.124 | 1.683 | 1.943 | 0 | 1 | 0 | 0 | 0.061 |
+| 25 | original / min_cv / 0.2 / first | 8 | -1.301 | 1.836 | 3.190 | 3 | 4 | 0 | 0 | 0.022 |
+| 26 | original / min_cv / 0.2 / prominent | 8 | 0.169 | 1.912 | 2.317 | 0 | 1 | 0 | 0 | 0.225 |
+| 27 | original / min_cv / 1.0 / prominent | 8 | 0.169 | 1.912 | 2.317 | 0 | 1 | 0 | 0 | 0.225 |
+| 28 | original / min_cv / 2.0 / prominent | 8 | 0.169 | 1.912 | 2.317 | 0 | 1 | 0 | 0 | 0.225 |
+| 29 | thalweg / one_se / 0.2 / first | 8 | 1.335 | 2.127 | 2.748 | 1 | 3 | 0 | 0 | 1.127 |
+| 30 | thalweg / one_se / 1.0 / first | 8 | 1.335 | 2.127 | 2.748 | 1 | 3 | 0 | 0 | 1.127 |
+| 31 | thalweg / one_se / 2.0 / first | 8 | 1.335 | 2.127 | 2.748 | 1 | 3 | 0 | 0 | 1.127 |
+| 32 | thalweg / one_se / 3.0 / first | 8 | 1.335 | 2.127 | 2.748 | 1 | 3 | 0 | 0 | 1.127 |
+| 33 | thalweg / one_se / 0.2 / highest | 8 | 2.088 | 2.322 | 2.967 | 1 | 3 | 0 | 0 | 0.285 |
+| 34 | thalweg / one_se / 0.2 / prominent | 8 | 2.088 | 2.322 | 2.967 | 1 | 3 | 0 | 0 | 0.285 |
+| 35 | thalweg / one_se / 1.0 / highest | 8 | 2.088 | 2.322 | 2.967 | 1 | 3 | 0 | 0 | 0.285 |
+| 36 | thalweg / one_se / 1.0 / prominent | 8 | 2.088 | 2.322 | 2.967 | 1 | 3 | 0 | 0 | 0.285 |
+| 37 | thalweg / one_se / 2.0 / highest | 8 | 2.088 | 2.322 | 2.967 | 1 | 3 | 0 | 0 | 0.285 |
+| 38 | thalweg / one_se / 2.0 / prominent | 8 | 2.088 | 2.322 | 2.967 | 1 | 3 | 0 | 0 | 0.285 |
+| 39 | thalweg / one_se / 3.0 / highest | 8 | 2.088 | 2.322 | 2.967 | 1 | 3 | 0 | 0 | 0.285 |
+| 40 | thalweg / one_se / 3.0 / prominent | 8 | 2.088 | 2.322 | 2.967 | 1 | 3 | 0 | 0 | 0.285 |
+| 41 | thalweg / min_cv / 0.2 / highest | 8 | 2.256 | 2.365 | 3.078 | 2 | 3 | 0 | 0 | 0.254 |
+| 42 | thalweg / min_cv / 1.0 / highest | 8 | 2.256 | 2.365 | 3.078 | 2 | 3 | 0 | 0 | 0.254 |
+| 43 | thalweg / min_cv / 2.0 / highest | 8 | 2.256 | 2.365 | 3.078 | 2 | 3 | 0 | 0 | 0.254 |
+| 44 | thalweg / min_cv / 3.0 / highest | 8 | 2.256 | 2.365 | 3.078 | 2 | 3 | 0 | 0 | 0.254 |
+| 45 | thalweg / min_cv / 0.2 / prominent | 8 | 2.622 | 2.731 | 3.733 | 2 | 3 | 0 | 0 | 0.779 |
+| 46 | thalweg / min_cv / 1.0 / prominent | 8 | 2.622 | 2.731 | 3.733 | 2 | 3 | 0 | 0 | 0.779 |
+| 47 | thalweg / min_cv / 2.0 / prominent | 8 | 2.622 | 2.731 | 3.733 | 2 | 3 | 0 | 0 | 0.779 |
+| 48 | thalweg / min_cv / 3.0 / prominent | 8 | 2.622 | 2.731 | 3.733 | 2 | 3 | 0 | 0 | 0.779 |
 
 ## Riepilogo rispetto a z_expert_high
 
 | # | multichannel / selection / min_hyd_depth / criterio | n | errore medio | errore medio ass. | RMSE | entro 0.25 m | entro 0.50 m | senza bankfull | seed parziali | ampiezza media seed |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | thalweg / min_cv / 0.2 / highest | 8 | -0.127 | 0.217 | 0.272 | 5 | 7 | 0 | 0 | 0.254 |
-| 2 | thalweg / min_cv / 1.0 / highest | 8 | -0.127 | 0.217 | 0.272 | 5 | 7 | 0 | 0 | 0.254 |
-| 3 | thalweg / min_cv / 2.0 / highest | 8 | -0.127 | 0.217 | 0.272 | 5 | 7 | 0 | 0 | 0.254 |
-| 4 | thalweg / min_cv / 3.0 / highest | 8 | -0.127 | 0.217 | 0.272 | 5 | 7 | 0 | 0 | 0.254 |
-| 5 | thalweg / one_se / 0.2 / highest | 8 | -0.295 | 0.358 | 0.411 | 3 | 6 | 0 | 0 | 0.285 |
-| 6 | thalweg / one_se / 0.2 / prominent | 8 | -0.295 | 0.358 | 0.411 | 3 | 6 | 0 | 0 | 0.285 |
-| 7 | thalweg / one_se / 1.0 / highest | 8 | -0.295 | 0.358 | 0.411 | 3 | 6 | 0 | 0 | 0.285 |
-| 8 | thalweg / one_se / 1.0 / prominent | 8 | -0.295 | 0.358 | 0.411 | 3 | 6 | 0 | 0 | 0.285 |
-| 9 | thalweg / one_se / 2.0 / highest | 8 | -0.295 | 0.358 | 0.411 | 3 | 6 | 0 | 0 | 0.285 |
-| 10 | thalweg / one_se / 2.0 / prominent | 8 | -0.295 | 0.358 | 0.411 | 3 | 6 | 0 | 0 | 0.285 |
-| 11 | thalweg / one_se / 3.0 / highest | 8 | -0.295 | 0.358 | 0.411 | 3 | 6 | 0 | 0 | 0.285 |
-| 12 | thalweg / one_se / 3.0 / prominent | 8 | -0.295 | 0.358 | 0.411 | 3 | 6 | 0 | 0 | 0.285 |
-| 13 | thalweg / min_cv / 0.2 / prominent | 8 | 0.240 | 0.452 | 0.873 | 5 | 7 | 0 | 0 | 0.779 |
-| 14 | thalweg / min_cv / 1.0 / prominent | 8 | 0.240 | 0.452 | 0.873 | 5 | 7 | 0 | 0 | 0.779 |
-| 15 | thalweg / min_cv / 2.0 / prominent | 8 | 0.240 | 0.452 | 0.873 | 5 | 7 | 0 | 0 | 0.779 |
-| 16 | thalweg / min_cv / 3.0 / prominent | 8 | 0.240 | 0.452 | 0.873 | 5 | 7 | 0 | 0 | 0.779 |
-| 17 | thalweg / one_se / 0.2 / first | 8 | -1.047 | 1.111 | 1.740 | 2 | 4 | 0 | 0 | 1.127 |
-| 18 | thalweg / one_se / 1.0 / first | 8 | -1.047 | 1.111 | 1.740 | 2 | 4 | 0 | 0 | 1.127 |
-| 19 | thalweg / one_se / 2.0 / first | 8 | -1.047 | 1.111 | 1.740 | 2 | 4 | 0 | 0 | 1.127 |
-| 20 | thalweg / one_se / 3.0 / first | 8 | -1.047 | 1.111 | 1.740 | 2 | 4 | 0 | 0 | 1.127 |
-| 21 | thalweg / min_cv / 3.0 / first | 8 | -1.880 | 1.970 | 2.418 | 1 | 2 | 0 | 0 | 0.728 |
-| 22 | original / min_cv / 0.2 / prominent | 8 | -2.214 | 2.214 | 2.453 | 1 | 1 | 0 | 0 | 0.225 |
-| 23 | original / min_cv / 1.0 / prominent | 8 | -2.214 | 2.214 | 2.453 | 1 | 1 | 0 | 0 | 0.225 |
-| 24 | original / min_cv / 2.0 / prominent | 8 | -2.214 | 2.214 | 2.453 | 1 | 1 | 0 | 0 | 0.225 |
-| 25 | original / min_cv / 0.2 / highest | 8 | -2.453 | 2.453 | 2.618 | 1 | 1 | 0 | 0 | 0.021 |
-| 26 | original / min_cv / 1.0 / highest | 8 | -2.453 | 2.453 | 2.618 | 1 | 1 | 0 | 0 | 0.021 |
-| 27 | original / min_cv / 2.0 / highest | 8 | -2.453 | 2.453 | 2.618 | 1 | 1 | 0 | 0 | 0.021 |
-| 28 | original / min_cv / 3.0 / highest | 8 | -2.453 | 2.453 | 2.618 | 1 | 1 | 0 | 0 | 0.021 |
-| 29 | original / min_cv / 3.0 / prominent | 8 | -2.453 | 2.453 | 2.618 | 1 | 1 | 0 | 0 | 0.021 |
-| 30 | original / one_se / 0.2 / highest | 8 | -2.506 | 2.506 | 2.672 | 0 | 1 | 0 | 0 | 0.061 |
-| 31 | original / one_se / 0.2 / prominent | 8 | -2.506 | 2.506 | 2.672 | 0 | 1 | 0 | 0 | 0.061 |
-| 32 | original / one_se / 1.0 / highest | 8 | -2.506 | 2.506 | 2.672 | 0 | 1 | 0 | 0 | 0.061 |
-| 33 | original / one_se / 1.0 / prominent | 8 | -2.506 | 2.506 | 2.672 | 0 | 1 | 0 | 0 | 0.061 |
-| 34 | original / one_se / 2.0 / highest | 8 | -2.506 | 2.506 | 2.672 | 0 | 1 | 0 | 0 | 0.061 |
-| 35 | original / one_se / 2.0 / prominent | 8 | -2.506 | 2.506 | 2.672 | 0 | 1 | 0 | 0 | 0.061 |
-| 36 | original / one_se / 3.0 / highest | 8 | -2.506 | 2.506 | 2.672 | 0 | 1 | 0 | 0 | 0.061 |
-| 37 | original / one_se / 3.0 / prominent | 8 | -2.506 | 2.506 | 2.672 | 0 | 1 | 0 | 0 | 0.061 |
-| 38 | original / one_se / 1.0 / first | 8 | -2.711 | 2.711 | 2.948 | 0 | 1 | 0 | 0 | 0.059 |
-| 39 | original / one_se / 2.0 / first | 8 | -2.711 | 2.711 | 2.948 | 0 | 1 | 0 | 0 | 0.059 |
-| 40 | original / one_se / 3.0 / first | 8 | -2.711 | 2.711 | 2.948 | 0 | 1 | 0 | 0 | 0.059 |
-| 41 | original / one_se / 0.2 / first | 8 | -2.712 | 2.712 | 2.950 | 0 | 1 | 0 | 0 | 0.697 |
-| 42 | thalweg / min_cv / 1.0 / first | 8 | -2.639 | 2.729 | 3.278 | 1 | 2 | 0 | 0 | 1.732 |
-| 43 | thalweg / min_cv / 2.0 / first | 8 | -2.639 | 2.729 | 3.278 | 1 | 2 | 0 | 0 | 1.732 |
-| 44 | original / min_cv / 3.0 / first | 8 | -2.847 | 2.847 | 3.085 | 1 | 1 | 0 | 0 | 0.021 |
-| 45 | original / min_cv / 1.0 / first | 8 | -3.015 | 3.015 | 3.321 | 1 | 1 | 0 | 0 | 0.022 |
-| 46 | original / min_cv / 2.0 / first | 8 | -3.015 | 3.015 | 3.321 | 1 | 1 | 0 | 0 | 0.022 |
-| 47 | thalweg / min_cv / 0.2 / first | 8 | -3.020 | 3.110 | 3.981 | 1 | 2 | 0 | 0 | 2.113 |
-| 48 | original / min_cv / 0.2 / first | 8 | -3.683 | 3.683 | 4.298 | 1 | 1 | 0 | 0 | 0.022 |
+| 1 | thalweg / min_cv / 0.2 / highest | 8 | -0.508 | 0.508 | 0.981 | 5 | 6 | 0 | 0 | 0.254 |
+| 2 | thalweg / min_cv / 1.0 / highest | 8 | -0.508 | 0.508 | 0.981 | 5 | 6 | 0 | 0 | 0.254 |
+| 3 | thalweg / min_cv / 2.0 / highest | 8 | -0.508 | 0.508 | 0.981 | 5 | 6 | 0 | 0 | 0.254 |
+| 4 | thalweg / min_cv / 3.0 / highest | 8 | -0.508 | 0.508 | 0.981 | 5 | 6 | 0 | 0 | 0.254 |
+| 5 | thalweg / one_se / 0.2 / highest | 8 | -0.676 | 0.682 | 1.075 | 2 | 5 | 0 | 0 | 0.285 |
+| 6 | thalweg / one_se / 0.2 / prominent | 8 | -0.676 | 0.682 | 1.075 | 2 | 5 | 0 | 0 | 0.285 |
+| 7 | thalweg / one_se / 1.0 / highest | 8 | -0.676 | 0.682 | 1.075 | 2 | 5 | 0 | 0 | 0.285 |
+| 8 | thalweg / one_se / 1.0 / prominent | 8 | -0.676 | 0.682 | 1.075 | 2 | 5 | 0 | 0 | 0.285 |
+| 9 | thalweg / one_se / 2.0 / highest | 8 | -0.676 | 0.682 | 1.075 | 2 | 5 | 0 | 0 | 0.285 |
+| 10 | thalweg / one_se / 2.0 / prominent | 8 | -0.676 | 0.682 | 1.075 | 2 | 5 | 0 | 0 | 0.285 |
+| 11 | thalweg / one_se / 3.0 / highest | 8 | -0.676 | 0.682 | 1.075 | 2 | 5 | 0 | 0 | 0.285 |
+| 12 | thalweg / one_se / 3.0 / prominent | 8 | -0.676 | 0.682 | 1.075 | 2 | 5 | 0 | 0 | 0.285 |
+| 13 | thalweg / min_cv / 0.2 / prominent | 8 | -0.141 | 0.743 | 1.284 | 5 | 6 | 0 | 0 | 0.779 |
+| 14 | thalweg / min_cv / 1.0 / prominent | 8 | -0.141 | 0.743 | 1.284 | 5 | 6 | 0 | 0 | 0.779 |
+| 15 | thalweg / min_cv / 2.0 / prominent | 8 | -0.141 | 0.743 | 1.284 | 5 | 6 | 0 | 0 | 0.779 |
+| 16 | thalweg / min_cv / 3.0 / prominent | 8 | -0.141 | 0.743 | 1.284 | 5 | 6 | 0 | 0 | 0.779 |
+| 17 | thalweg / one_se / 0.2 / first | 8 | -1.428 | 1.434 | 2.004 | 1 | 3 | 0 | 0 | 1.127 |
+| 18 | thalweg / one_se / 1.0 / first | 8 | -1.428 | 1.434 | 2.004 | 1 | 3 | 0 | 0 | 1.127 |
+| 19 | thalweg / one_se / 2.0 / first | 8 | -1.428 | 1.434 | 2.004 | 1 | 3 | 0 | 0 | 1.127 |
+| 20 | thalweg / one_se / 3.0 / first | 8 | -1.428 | 1.434 | 2.004 | 1 | 3 | 0 | 0 | 1.127 |
+| 21 | thalweg / min_cv / 3.0 / first | 8 | -2.261 | 2.261 | 2.595 | 1 | 1 | 0 | 0 | 0.728 |
+| 22 | original / min_cv / 0.2 / prominent | 8 | -2.595 | 2.595 | 2.715 | 0 | 0 | 0 | 0 | 0.225 |
+| 23 | original / min_cv / 1.0 / prominent | 8 | -2.595 | 2.595 | 2.715 | 0 | 0 | 0 | 0 | 0.225 |
+| 24 | original / min_cv / 2.0 / prominent | 8 | -2.595 | 2.595 | 2.715 | 0 | 0 | 0 | 0 | 0.225 |
+| 25 | original / min_cv / 0.2 / highest | 8 | -2.834 | 2.834 | 2.865 | 0 | 0 | 0 | 0 | 0.021 |
+| 26 | original / min_cv / 1.0 / highest | 8 | -2.834 | 2.834 | 2.865 | 0 | 0 | 0 | 0 | 0.021 |
+| 27 | original / min_cv / 2.0 / highest | 8 | -2.834 | 2.834 | 2.865 | 0 | 0 | 0 | 0 | 0.021 |
+| 28 | original / min_cv / 3.0 / highest | 8 | -2.834 | 2.834 | 2.865 | 0 | 0 | 0 | 0 | 0.021 |
+| 29 | original / min_cv / 3.0 / prominent | 8 | -2.834 | 2.834 | 2.865 | 0 | 0 | 0 | 0 | 0.021 |
+| 30 | original / one_se / 0.2 / highest | 8 | -2.887 | 2.887 | 2.917 | 0 | 0 | 0 | 0 | 0.061 |
+| 31 | original / one_se / 0.2 / prominent | 8 | -2.887 | 2.887 | 2.917 | 0 | 0 | 0 | 0 | 0.061 |
+| 32 | original / one_se / 1.0 / highest | 8 | -2.887 | 2.887 | 2.917 | 0 | 0 | 0 | 0 | 0.061 |
+| 33 | original / one_se / 1.0 / prominent | 8 | -2.887 | 2.887 | 2.917 | 0 | 0 | 0 | 0 | 0.061 |
+| 34 | original / one_se / 2.0 / highest | 8 | -2.887 | 2.887 | 2.917 | 0 | 0 | 0 | 0 | 0.061 |
+| 35 | original / one_se / 2.0 / prominent | 8 | -2.887 | 2.887 | 2.917 | 0 | 0 | 0 | 0 | 0.061 |
+| 36 | original / one_se / 3.0 / highest | 8 | -2.887 | 2.887 | 2.917 | 0 | 0 | 0 | 0 | 0.061 |
+| 37 | original / one_se / 3.0 / prominent | 8 | -2.887 | 2.887 | 2.917 | 0 | 0 | 0 | 0 | 0.061 |
+| 38 | thalweg / min_cv / 1.0 / first | 8 | -3.020 | 3.020 | 3.411 | 1 | 1 | 0 | 0 | 1.732 |
+| 39 | thalweg / min_cv / 2.0 / first | 8 | -3.020 | 3.020 | 3.411 | 1 | 1 | 0 | 0 | 1.732 |
+| 40 | original / one_se / 1.0 / first | 8 | -3.092 | 3.092 | 3.172 | 0 | 0 | 0 | 0 | 0.059 |
+| 41 | original / one_se / 2.0 / first | 8 | -3.092 | 3.092 | 3.172 | 0 | 0 | 0 | 0 | 0.059 |
+| 42 | original / one_se / 3.0 / first | 8 | -3.092 | 3.092 | 3.172 | 0 | 0 | 0 | 0 | 0.059 |
+| 43 | original / one_se / 0.2 / first | 8 | -3.094 | 3.094 | 3.173 | 0 | 0 | 0 | 0 | 0.697 |
+| 44 | original / min_cv / 3.0 / first | 8 | -3.228 | 3.228 | 3.297 | 0 | 0 | 0 | 0 | 0.021 |
+| 45 | original / min_cv / 1.0 / first | 8 | -3.397 | 3.397 | 3.518 | 0 | 0 | 0 | 0 | 0.022 |
+| 46 | original / min_cv / 2.0 / first | 8 | -3.397 | 3.397 | 3.518 | 0 | 0 | 0 | 0 | 0.022 |
+| 47 | thalweg / min_cv / 0.2 / first | 8 | -3.401 | 3.401 | 4.091 | 1 | 1 | 0 | 0 | 2.113 |
+| 48 | original / min_cv / 0.2 / first | 8 | -4.065 | 4.065 | 4.453 | 0 | 0 | 0 | 0 | 0.022 |
 
 ## Le 6 combinazioni più vicine per sezione
 
 ### arno.csv sezione 1
 
-z_expert_low = 15.06 m, z_expert_high = 15.06 m
+z_expert_low = 15.71 m, z_expert_high = 18.11 m
+
+Nota: piana interna bassa in sinistra a 15,2–15,5 m (200–228 m); piana dietro argine destro a ~15,2 m
 
 Più vicine a z_expert_low:
 
 | combinazione | mediana | min–max seed | seed ok | errore |
 |---|---|---|---|---|
-| thalweg / one_se / 0.2 / first | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 0.2 / highest | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 0.2 / prominent | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 1.0 / first | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 1.0 / highest | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 1.0 / prominent | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
+| thalweg / min_cv / 0.2 / first | 15.421 | 15.345–15.447 | 11/11 | -0.289 |
+| thalweg / min_cv / 0.2 / highest | 15.421 | 15.345–15.447 | 11/11 | -0.289 |
+| thalweg / min_cv / 0.2 / prominent | 15.421 | 15.345–15.447 | 11/11 | -0.289 |
+| thalweg / min_cv / 1.0 / first | 15.421 | 15.345–15.447 | 11/11 | -0.289 |
+| thalweg / min_cv / 1.0 / highest | 15.421 | 15.345–15.447 | 11/11 | -0.289 |
+| thalweg / min_cv / 1.0 / prominent | 15.421 | 15.345–15.447 | 11/11 | -0.289 |
 
 Più vicine a z_expert_high:
 
 | combinazione | mediana | min–max seed | seed ok | errore |
 |---|---|---|---|---|
-| thalweg / one_se / 0.2 / first | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 0.2 / highest | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 0.2 / prominent | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 1.0 / first | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 1.0 / highest | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
-| thalweg / one_se / 1.0 / prominent | 15.290 | 15.218–15.299 | 11/11 | 0.230 |
+| thalweg / min_cv / 0.2 / first | 15.421 | 15.345–15.447 | 11/11 | -2.689 |
+| thalweg / min_cv / 0.2 / highest | 15.421 | 15.345–15.447 | 11/11 | -2.689 |
+| thalweg / min_cv / 0.2 / prominent | 15.421 | 15.345–15.447 | 11/11 | -2.689 |
+| thalweg / min_cv / 1.0 / first | 15.421 | 15.345–15.447 | 11/11 | -2.689 |
+| thalweg / min_cv / 1.0 / highest | 15.421 | 15.345–15.447 | 11/11 | -2.689 |
+| thalweg / min_cv / 1.0 / prominent | 15.421 | 15.345–15.447 | 11/11 | -2.689 |
 
 ### arno.csv sezione 2
 
