@@ -1,38 +1,28 @@
-# This file contains metadata for your plugin. Beginning
-# with version 1.8 this is the preferred way to supply information about a
-# plugin. The current method of embedding metadata in __init__.py will
-# be supported until version 2.0
-
-# This file should be included when you package your plugin.
-
-# Mandatory items:
-
-
 [general]
 name=Bankfull width detection
-qgisMinimumVersion=3.0
-description=Automatic bankfull width detection
-version=0.1
+qgisMinimumVersion=3.34
+qgisMaximumVersion=3.99
+description=Automatic bankfull level and width detection from DTM cross-sections
+about=Detects the bankfull level of river cross-sections sampled from a DTM with the
+    maximum hydraulic depth method (A/W) of De Rosa et al. (2019), ISPRS International
+    Journal of Geo-Information 8(11):480. The A/W curve is smoothed with a cross-validated smoothing
+    spline in pure Python (numpy/scipy): R and rpy2 are no longer needed. The optional
+    "thalweg" handling of multiple wet polygons follows an idea of HydXS (Garber and
+    Thompson 2024, Water Resources Research, doi 10.1029/2023WR035269).
+    The tools are available as Processing algorithms.
+version=0.2
 author=Pierluigi De Rosa
 email=pierluigi.derosa@gmail.com
 
-# end of mandatory metadata
+changelog=0.2 Port to QGIS 3.34+ without R: pure Python core, Processing provider,
+    legacy dialog removed.
+    0.1 Original QGIS 2 version (R/rpy2).
 
-# Optional items:
-
-# Uncomment the following line and add your changelog entries:
-# changelog=
-
-# tags are comma separated with spaces allowed
-tags=
-
-homepage=
-tracker=
-repository=
+tags=river, bankfull, cross-section, DTM, hydraulics, geomorphology, processing
+homepage=https://github.com/pierluigiderosa/BankFullDetection
+tracker=https://github.com/pierluigiderosa/BankFullDetection/issues
+repository=https://github.com/pierluigiderosa/BankFullDetection
 icon=icon.png
-# experimental flag
 experimental=True
-
-# deprecated flag (applies to the whole plugin, not just a single version
 deprecated=False
-
+hasProcessingProvider=yes

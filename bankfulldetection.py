@@ -1,89 +1,92 @@
-# -*- coding: utf-8 -*-
+"""BankFullDetection QGIS plugin: Processing provider registration and toolbar action.
+
+The plugin holds no computation: the method lives in ``bankfull_core`` and the QGIS side
+(sampling, layers) in the Processing algorithms of ``processing_provider``.
+
+Copyright (C) 2014 by Pierluigi De Rosa (pierluigi.derosa@gmail.com).
+This program is free software; you can redistribute it and/or modify it under the terms of
+the GNU General Public License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 """
-/***************************************************************************
- BankFullDetection
-                                 A QGIS plugin
- Automatic bankfull width detection
-                              -------------------
-        begin                : 2014-01-20
-        copyright            : (C) 2014 by Pierluigi De Rosa
-        email                : pierluigi.derosa@gmail.com
- ***************************************************************************/
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-"""
-# Import the PyQt and QGIS libraries
-from qgis.PyQt.QtCore import *
-from qgis.PyQt.QtGui import *
-from qgis.PyQt.QtWidgets import *
-from qgis.core import *
-# Initialize Qt resources from file resources.py
-from . import resources_rc
-# Import the code for the dialog
-from .bankfulldetectiondialog import BankFullDetectionDialog
-import os.path
+import os
+
+from qgis.core import Qgis, QgsApplication
+from qgis.PyQt.QtCore import QCoreApplication, QTranslator
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction
+
+from .processing_provider.provider import PROVIDER_ID, BankfullProvider
+
+#: Algorithm opened by the toolbar / menu action.
+MAIN_ALGORITHM_ID = f"{PROVIDER_ID}:detectbankfull"
+
+_MENU = "&Bankfull width detection"
 
 
-class BankFullDetection:
+class BankFullDetectionPlugin:
+    """QGIS plugin object returned by ``classFactory``."""
 
     def __init__(self, iface):
-        # Save reference to the QGIS interface
         self.iface = iface
-        # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
-        # initialize locale
-        locale = QSettings().value("locale/userLocale")[0:2]
-        localePath = os.path.join(self.plugin_dir, 'i18n', 'bankfulldetection_{}.qm'.format(locale))
+        self.provider = None
+        self.action = None
+        self.translator = None
+        self._install_translator()
 
-        if os.path.exists(localePath):
+    def _install_translator(self):
+        locale = (QgsApplication.locale() or "")[:2]
+        qm_path = os.path.join(self.plugin_dir, "i18n", f"bankfulldetection_{locale}.qm")
+        if locale and os.path.exists(qm_path):
             self.translator = QTranslator()
-            self.translator.load(localePath)
-
-            if qVersion() > '4.3.3':
+            if self.translator.load(qm_path):
                 QCoreApplication.installTranslator(self.translator)
+            else:
+                self.translator = None
 
-        
+    @staticmethod
+    def tr(message):
+        return QCoreApplication.translate("BankFullDetection", message)
+
+    def initProcessing(self):
+        """Register the Processing provider (also called by qgis_process, without GUI)."""
+        if self.provider is None:
+            self.provider = BankfullProvider(self.plugin_dir)
+            QgsApplication.processingRegistry().addProvider(self.provider)
 
     def initGui(self):
-        # Create action that will start plugin configuration
-        self.action = QAction(
-            QIcon(":/plugins/bankfulldetection/icon.png"),
-            u"Automatic bankfull width detection", self.iface.mainWindow())
-        # connect the action to the run method
+        self.initProcessing()
+        icon = QIcon(os.path.join(self.plugin_dir, "icon.png"))
+        self.action = QAction(icon, self.tr("Automatic bankfull width detection"),
+                              self.iface.mainWindow())
         self.action.triggered.connect(self.run)
-
-        # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu(u"&Bankfull width detection", self.action)
+        self.iface.addPluginToMenu(self.tr(_MENU), self.action)
 
     def unload(self):
-        # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(u"&Bankfull width detection", self.action)
-        self.iface.removeToolBarIcon(self.action)
+        if self.action is not None:
+            self.iface.removePluginMenu(self.tr(_MENU), self.action)
+            self.iface.removeToolBarIcon(self.action)
+            self.action.deleteLater()
+            self.action = None
+        if self.provider is not None:
+            QgsApplication.processingRegistry().removeProvider(self.provider)
+            self.provider = None
+        if self.translator is not None:
+            QCoreApplication.removeTranslator(self.translator)
+            self.translator = None
 
-    # run method that performs all the real work
     def run(self):
-        try:
-            import shapely
-        except ImportError:
-            QMessageBox.warning(self.iface.mainWindow(),
-                                "BankFullDetection",
-                                'Library "shapely" not found. Please install!')
+        """Open the Processing dialog of the main algorithm."""
+        registry = QgsApplication.processingRegistry()
+        if registry.algorithmById(MAIN_ALGORITHM_ID) is None:
+            self.iface.messageBar().pushMessage(
+                "BankFullDetection",
+                self.tr("The bankfull detection algorithm is not available yet."),
+                level=Qgis.Info,
+            )
             return
-        
-        # Create the dialog (after translation) and keep reference
-        self.dlg = BankFullDetectionDialog(self.iface)
-        # show the dialog
-        self.dlg.show()
-        # Run the dialog event loop
-        #~ self.dlg.exec_()
-        # See if OK was pressed
-        #~ if result == 1:
-            #~ pass
+        import processing  # QGIS Processing plugin, imported only when needed
+
+        processing.execAlgorithmDialog(MAIN_ALGORITHM_ID)
