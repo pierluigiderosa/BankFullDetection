@@ -5,6 +5,7 @@ import os
 from qgis.core import QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
+from .alg_detect_bankfull import DetectBankfullAlgorithm
 from .alg_generate_sections import GenerateSectionsAlgorithm
 
 #: Provider id: algorithms are addressed as "bankfulldetection:<algorithm name>".
@@ -32,3 +33,4 @@ class BankfullProvider(QgsProcessingProvider):
 
     def loadAlgorithms(self):
         self.addAlgorithm(GenerateSectionsAlgorithm())
+        self.addAlgorithm(DetectBankfullAlgorithm())
