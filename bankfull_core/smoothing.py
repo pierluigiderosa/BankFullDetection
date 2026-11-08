@@ -25,7 +25,7 @@ from scipy.interpolate import BSpline, PPoly
 from scipy.linalg import solveh_banded
 from scipy.optimize import brentq
 
-from .options import BankfullOptions
+from .options import CRITERIA, BankfullOptions
 
 #: ``SmoothingResult.status`` values.
 STATUS_OK = "ok"
@@ -407,8 +407,12 @@ def find_maxima(spline, x):
     return np.column_stack([roots, spline(roots)]) if roots.size else np.empty((0, 2))
 
 
-def pick_bankfull(maxima, x, y, min_hyd_depth, no_max="explicit"):
-    """First maximum (lowest level) with value >= min_hyd_depth.
+def pick_bankfull(maxima, x, y, min_hyd_depth, no_max="explicit", criterion="first"):
+    """Bankfull among the maxima with value >= min_hyd_depth.
+
+    ``criterion == "first"``: the first maximum (lowest level), as the original method.
+    ``criterion == "highest"``: the maximum with the largest value; on ties the lowest.
+    ``maxima`` must be sorted by ascending level, as returned by ``find_maxima``.
 
     With no maxima: STATUS_NO_MAXIMA if ``no_max == "explicit"``; with
     ``no_max == "original"`` the last raw point ``(x[-1], y[-1])`` is used as the only
@@ -417,6 +421,8 @@ def pick_bankfull(maxima, x, y, min_hyd_depth, no_max="explicit"):
     Returns:
         (level or None, value or None, status, fallback).
     """
+    if criterion not in CRITERIA:
+        raise ValueError(f"unknown criterion {criterion!r}")
     maxima = np.asarray(maxima, dtype=float).reshape(-1, 2)
     fallback = False
     if maxima.shape[0] == 0:
@@ -429,7 +435,12 @@ def pick_bankfull(maxima, x, y, min_hyd_depth, no_max="explicit"):
     ok = np.flatnonzero(maxima[:, 1] >= min_hyd_depth)
     if ok.size == 0:
         return None, None, STATUS_NO_MAX_GE_MIN, fallback
-    level, value = maxima[ok[0]]
+    if criterion == "first":
+        best = ok[0]
+    else:
+        # argmax returns the first occurrence: the lowest level on ties.
+        best = ok[np.argmax(maxima[ok, 1])]
+    level, value = maxima[best]
     return float(level), float(value), STATUS_OK, fallback
 
 
@@ -465,7 +476,7 @@ def smooth_curve(x, y, options=None, folds=None):
     maxima = find_maxima(spline, x)
     maxima.flags.writeable = False
     level, value, status, fallback = pick_bankfull(
-        maxima, x, y, options.min_hyd_depth, options.no_max
+        maxima, x, y, options.min_hyd_depth, options.no_max, options.criterion
     )
     return SmoothingResult(
         spar=float(table.spar[idx]), lam=spline.lam, spar_index=idx,

@@ -20,6 +20,12 @@ SELECTION_MODES = ("min_cv", "one_se")
 #: - "original": the last point of the curve is used, as in the original method.
 NO_MAX_MODES = ("explicit", "original")
 
+#: Allowed values of ``BankfullOptions.criterion`` (choice among the smoothed maxima with
+#: A/W >= min_hyd_depth).
+#: - "first": lowest maximum (original method).
+#: - "highest": maximum with the largest smoothed A/W; on ties, the lowest of them.
+CRITERIA = ("first", "highest")
+
 
 def _is_int(value):
     return isinstance(value, Integral) and not isinstance(value, bool)
@@ -51,6 +57,12 @@ class BankfullOptions:
         selection: how spar is chosen from the CV table, see ``SELECTION_MODES``.
         seed: seed of the random CV folds (``numpy.random.default_rng``).
         no_max: behaviour when the smoothed curve has no maxima, see ``NO_MAX_MODES``.
+        criterion: which maximum becomes the bankfull, see ``CRITERIA``.
+        n_runs: number of CV runs of ``compute_bankfull_level``, with seeds
+            ``seed .. seed + n_runs - 1``; the level is the median over the runs.
+
+    The defaults reproduce the original method; see ``recommended()`` for the options
+    that agree best with the expert estimates.
     """
 
     n_levels: int = 100
@@ -63,6 +75,22 @@ class BankfullOptions:
     selection: str = "min_cv"
     seed: int = 0
     no_max: str = "explicit"
+    criterion: str = "first"
+    n_runs: int = 1
+
+    @classmethod
+    def recommended(cls):
+        """Options that agreed best with the expert estimates (bank top of the main channel).
+
+        ``multichannel="thalweg"``, ``selection="min_cv"``, ``criterion="highest"``,
+        ``n_runs=11``; every other parameter at its default. On the 8 Arno sections with
+        expert estimates the minimum hydraulic depth (0.2-3.0) does not change the result.
+        Derived from 8 sections only: indicative, not a calibration. See
+        ``docs/confronto-opzioni.md`` and the "Recommended options" section of
+        ``docs/smoothing.md``. Use ``dataclasses.replace`` to change single fields.
+        """
+        return cls(multichannel="thalweg", selection="min_cv", criterion="highest",
+                   n_runs=11)
 
     def __post_init__(self):
         if not _is_int(self.n_levels) or self.n_levels < 2:
@@ -100,3 +128,7 @@ class BankfullOptions:
             raise ValueError(f"seed must be an integer >= 0, got {self.seed!r}")
         if self.no_max not in NO_MAX_MODES:
             raise ValueError(f"no_max must be one of {NO_MAX_MODES}, got {self.no_max!r}")
+        if self.criterion not in CRITERIA:
+            raise ValueError(f"criterion must be one of {CRITERIA}, got {self.criterion!r}")
+        if not _is_int(self.n_runs) or self.n_runs < 1:
+            raise ValueError(f"n_runs must be an integer >= 1, got {self.n_runs!r}")

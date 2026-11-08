@@ -24,6 +24,7 @@ from conftest import (
 from numpy.testing import assert_allclose, assert_array_equal
 
 from bankfull_core import (
+    STATUS_NO_MAX_GE_MIN,
     STATUS_NO_MAXIMA,
     STATUS_OK,
     BankfullOptions,
@@ -37,6 +38,7 @@ from bankfull_core.smoothing import (
     _SplineSystem,
     cross_validate,
     find_maxima,
+    pick_bankfull,
     select_spar,
     spar_grid,
 )
@@ -333,6 +335,99 @@ def test_level3_inner_bench(curves, mv):
     assert abs(res.bankfull_level - EXTRA_MAXIMA[BENCH][0]) <= Z_TOL
 
 
+# ------------------------------------------------------------- choice of the maximum
+
+# Constructed maxima (level, smoothed A/W), ascending level.
+_MAXIMA = np.array([[1.0, 0.5], [2.0, 1.2], [3.0, 2.5], [4.0, 1.8], [5.0, 0.9]])
+_X = np.array([0.5, 6.0])
+_Y = np.array([0.1, 0.7])
+
+
+@pytest.mark.parametrize(
+    ("criterion", "min_hyd_depth", "expected"),
+    [
+        ("first", 1.0, (2.0, 1.2)),
+        ("highest", 1.0, (3.0, 2.5)),
+        ("first", 0.2, (1.0, 0.5)),
+        ("highest", 0.2, (3.0, 2.5)),
+        ("first", 2.0, (3.0, 2.5)),
+        ("highest", 2.0, (3.0, 2.5)),
+    ],
+)
+def test_pick_bankfull_criterion(criterion, min_hyd_depth, expected):
+    level, value, status, fallback = pick_bankfull(
+        _MAXIMA, _X, _Y, min_hyd_depth, criterion=criterion
+    )
+    assert (level, value) == expected
+    assert status == STATUS_OK and not fallback
+
+
+def test_pick_bankfull_highest_ignores_maxima_below_threshold():
+    maxima = np.array([[1.0, 0.8], [2.0, 1.1], [3.0, 0.95]])
+    level, _, _, _ = pick_bankfull(maxima, _X, _Y, 1.0, criterion="highest")
+    assert level == 2.0
+    maxima = np.array([[1.0, 5.0], [2.0, 1.1], [3.0, 1.3]])
+    level, _, _, _ = pick_bankfull(maxima, _X, _Y, 6.0, criterion="highest")
+    assert level is None
+
+
+def test_pick_bankfull_highest_tie_takes_lowest():
+    maxima = np.array([[1.0, 0.5], [2.0, 2.0], [3.0, 1.5], [4.0, 2.0]])
+    level, value, _, _ = pick_bankfull(maxima, _X, _Y, 1.0, criterion="highest")
+    assert (level, value) == (2.0, 2.0)
+
+
+@pytest.mark.parametrize("criterion", ["first", "highest"])
+def test_pick_bankfull_outcomes_without_maxima(criterion):
+    empty = np.empty((0, 2))
+    assert pick_bankfull(empty, _X, _Y, 1.0, criterion=criterion) == (
+        None, None, STATUS_NO_MAXIMA, False)
+    assert pick_bankfull(_MAXIMA, _X, _Y, 3.0, criterion=criterion) == (
+        None, None, STATUS_NO_MAX_GE_MIN, False)
+    # Fallback to the last raw point (no_max="original").
+    assert pick_bankfull(empty, _X, _Y, 0.5, "original", criterion) == (
+        6.0, 0.7, STATUS_OK, True)
+    assert pick_bankfull(empty, _X, _Y, 1.0, "original", criterion) == (
+        None, None, STATUS_NO_MAX_GE_MIN, True)
+
+
+def test_pick_bankfull_unknown_criterion():
+    with pytest.raises(ValueError):
+        pick_bankfull(_MAXIMA, _X, _Y, 1.0, criterion="prominent")
+
+
+@pytest.mark.parametrize("mv", MIN_HYD_DEPTHS)
+@pytest.mark.parametrize("key", KEYS, ids=str)
+def test_highest_on_golden_sections(curves, key, mv):
+    """With R's folds, "highest" picks the maximum with the largest smoothed A/W among
+    those >= threshold; the maxima and the spar do not depend on the criterion."""
+    c = curves[key]
+    first = smooth_curve(c.levels, c.hyd_depth, BankfullOptions(min_hyd_depth=mv),
+                         folds=FOLDS[key])
+    high = smooth_curve(c.levels, c.hyd_depth,
+                        BankfullOptions(min_hyd_depth=mv, criterion="highest"),
+                        folds=FOLDS[key])
+    assert high.spar == first.spar
+    assert_array_equal(high.maxima, first.maxima)
+    ok = high.maxima[high.maxima[:, 1] >= mv]
+    if ok.size == 0:
+        assert high.status == first.status and high.bankfull_level is None
+        return
+    best = ok[np.argmax(ok[:, 1])]
+    assert high.status == STATUS_OK
+    assert (high.bankfull_level, high.bankfull_value) == (best[0], best[1])
+    assert high.bankfull_value >= first.bankfull_value
+
+
+@pytest.mark.parametrize("mv", MIN_HYD_DEPTHS)
+def test_highest_inner_bench_takes_bank_top(curves, mv):
+    """On the inner bench section "highest" picks the bank-top maximum of the golden."""
+    c = curves[BENCH]
+    res = smooth_curve(c.levels, c.hyd_depth,
+                       BankfullOptions(min_hyd_depth=mv, criterion="highest"))
+    assert abs(res.bankfull_level - _golden_z(BENCH, mv)) <= Z_TOL
+
+
 # ---------------------------------------------------------------- grid lower limit
 
 
@@ -405,6 +500,8 @@ def test_one_se_not_below_min_cv(level2, key):
         {"spar_min": 1.0, "spar_max": 1.0}, {"spar_min": 1.5},
         {"selection": "1se"}, {"seed": -1}, {"seed": 1.0}, {"seed": False},
         {"no_max": "last"},
+        {"criterion": "prominent"}, {"criterion": ""}, {"criterion": None},
+        {"n_runs": 0}, {"n_runs": -1}, {"n_runs": 1.0}, {"n_runs": True},
     ],
 )
 def test_invalid_smoothing_options(kwargs):
