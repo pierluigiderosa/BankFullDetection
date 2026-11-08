@@ -104,7 +104,8 @@ def _golden_z(key, mv):
 def _read_expert():
     with open(DATA_DIR / "expert" / "expert_bankfull.csv", newline="",
               encoding="utf-8") as f:
-        return {(r["source_file"], int(r["section_id"])): r["z_expert"]
+        return {(r["source_file"], int(r["section_id"])):
+                (r["z_expert_low"], r["z_expert_high"])
                 for r in csv.DictReader(f)}
 
 
@@ -274,7 +275,7 @@ def test_level2_table(level2):
     expert = _read_expert()
     print("\nLevel 2 - full chain with R folds, min_cv")
     print(f"{'section':<20}{'mv':>5}{'spar':>8}{'border':>8}{'z new':>10}{'z golden':>10}"
-          f"{'dz':>9}{'z expert':>10}{'time s':>8}  note")
+          f"{'dz':>9}{'exp low':>10}{'exp high':>10}{'time s':>8}  note")
     times = []
     for key in KEYS:
         for mv in MIN_HYD_DEPTHS:
@@ -287,9 +288,10 @@ def test_level2_table(level2):
             gs = f"{g:.3f}" if g is not None else BANKFULL[(key[0], key[1], mv)]["error"]
             note = ("excluded" if key in LEVEL2_EXCLUDED
                     else "Newton lost max" if key in NEWTON_LOST_BANKFULL else "")
+            low, high = expert.get(key, ("", ""))
             print(f"{key[0] + ' ' + str(key[1]):<20}{mv:>5.1f}{res.spar:>8.4f}"
                   f"{res.spar_on_border!s:>8}{zs:>10}{gs:>10}{dz:>9}"
-                  f"{expert.get(key, '') or '-':>10}{dt:>8.3f}  {note}")
+                  f"{low or '-':>10}{high or '-':>10}{dt:>8.3f}  {note}")
     print(f"mean time per section run: {np.mean(times):.3f} s")
 
 

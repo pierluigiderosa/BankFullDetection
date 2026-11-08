@@ -1,9 +1,9 @@
-source_file,section_id,z_expert,note
-arno.csv,1,15.06,
-arno.csv,2,13.54,"la sezione interseca un fosso laterale (futuro affluente dell’Arno) tra 100 e 130 m; bankfull riferito all’alveo principale"
-arno.csv,3,17.5,
-arno.csv,5,17.7,
-arno.csv,6,18,
-arno.csv,7,16.9,la sezione ha sulla destra un argine ed oltre l'argine inizia una pianura ad una quota di 15.9 circa quindi il calcolo potrebbe essere influenzato ma la bankfull deve essere vicina alla quota che ti ho dato io
-arno.csv,8,17.7,
-arno.csv,9,17.2,
+source_file,section_id,z_expert_low,z_expert_high,note
+arno.csv,1,,15.06,
+arno.csv,2,13.54,,"la sezione interseca un fosso laterale (futuro affluente dell’Arno) tra 100 e 130 m; bankfull riferito all’alveo principale"
+arno.csv,3,,17.5,
+arno.csv,5,,17.7,
+arno.csv,6,,18,
+arno.csv,7,,16.9,la sezione ha sulla destra un argine ed oltre l'argine inizia una pianura ad una quota di 15.9 circa quindi il calcolo potrebbe essere influenzato ma la bankfull deve essere vicina alla quota che ti ho dato io
+arno.csv,8,12.66,,
+arno.csv,9,,17.2,

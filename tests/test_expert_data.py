@@ -7,7 +7,8 @@ import pytest
 from conftest import DATA_DIR, SECTIONS_DIR, read_sections
 
 EXPERT_CSV = DATA_DIR / "expert" / "expert_bankfull.csv"
-COLUMNS = ["source_file", "section_id", "z_expert", "note"]
+LEVELS = ["z_expert_low", "z_expert_high"]
+COLUMNS = ["source_file", "section_id", *LEVELS, "note"]
 SYNTHETIC = "synthetic.csv"
 
 
@@ -57,15 +58,36 @@ def test_one_row_per_real_section_sorted(expert_rows, real_sections):
     assert keys == sorted(real_sections)
 
 
-def test_z_expert_empty_or_within_section(expert_rows, real_sections):
+def _level(row, column):
+    """Return the level in `column` as float, or None if the cell is empty."""
+    text = row[column].strip()
+    return float(text) if text else None
+
+
+@pytest.mark.parametrize("column", LEVELS)
+def test_level_empty_or_within_section(expert_rows, real_sections, column):
     _, rows = expert_rows
     for row in rows:
-        text = row["z_expert"].strip()
-        if not text:
+        z = _level(row, column)
+        if z is None:
             continue
-        z = float(text)
-        assert math.isfinite(z), f"{_key(row)}: z_expert not finite"
+        assert math.isfinite(z), f"{_key(row)}: {column} not finite"
         zs = [p[1] for p in real_sections[_key(row)]]
         assert min(zs) <= z <= max(zs), (
-            f"{_key(row)}: z_expert {z} outside [{min(zs)}, {max(zs)}]"
+            f"{_key(row)}: {column} {z} outside [{min(zs)}, {max(zs)}]"
         )
+
+
+def test_at_least_one_level_per_row(expert_rows):
+    _, rows = expert_rows
+    empty = [_key(r) for r in rows if all(_level(r, c) is None for c in LEVELS)]
+    assert not empty, f"rows with no expert level: {empty}"
+
+
+def test_low_not_above_high(expert_rows):
+    _, rows = expert_rows
+    for row in rows:
+        low, high = (_level(row, c) for c in LEVELS)
+        if low is None or high is None:
+            continue
+        assert low <= high, f"{_key(row)}: z_expert_low {low} > z_expert_high {high}"
