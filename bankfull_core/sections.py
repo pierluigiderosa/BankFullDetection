@@ -6,6 +6,11 @@ the **right** bank, i.e. left and right looking in the direction of the axis: th
 be digitised from upstream to downstream. With a reversed axis the bankfull level does not
 change, but left and right are swapped. See ``docs/sections.md``.
 
+In tight bends sections can cross: ``find_crossings`` reports them, ``crossing_flags`` marks
+them, ``drop_crossing_sections`` removes them greedily, and ``crossings_inside_banks`` tells
+which crossings fall between the bankfull banks (the only ones that can make the channel
+polygon invalid).
+
 The idea comes from ``tools/XSGenerator.py`` of the legacy plugin (G. Allegri), with these
 differences: ``width`` is the total length (the legacy used it per side); the direction is
 averaged over a window along the axis instead of taken from the single segment; multi-part
@@ -99,6 +104,193 @@ def generate_sections(axis, step, width, *, offset=None, tangent_length=None):
                                     chainage=float(chainage), center=(cx, cy),
                                     coords=(left, right), azimuth=azimuth))
     return tuple(sections)
+
+
+@dataclass(frozen=True)
+class Crossing:
+    """Two section lines that intersect (result of ``find_crossings``).
+
+    Attributes:
+        first, second: indices of the two sections, ``first < second``.
+        points: (x, y) intersection points, sorted. A collinear overlap gives the vertices
+            of the shared stretch.
+    """
+
+    first: int
+    second: int
+    points: tuple
+
+
+def find_crossings(section_lines):
+    """All pairs of section lines that intersect (touching included).
+
+    In tight bends sections wider than twice the bend radius cross on the inner side.
+    The bankfull computation of each section is independent of the others, so a crossing
+    matters only if it falls between the banks (see ``crossings_inside_banks``).
+
+    Args:
+        section_lines: sequence of Section, LineString or sequences of (x, y), each with at
+            least 2 points and non-zero length.
+
+    Returns:
+        Tuple of Crossing sorted by (first, second).
+
+    Raises:
+        ValueError: if a section line is not valid.
+    """
+    lines = _section_lines(section_lines)
+    if len(lines) < 2:
+        return ()
+    tree = shapely.STRtree(lines)
+    query, found = tree.query(lines, predicate="intersects")
+    pairs = sorted({(int(a), int(b)) for a, b in zip(query, found, strict=True) if a < b})
+    return tuple(
+        Crossing(first=i, second=j,
+                 points=tuple(sorted(_points(lines[i].intersection(lines[j])))))
+        for i, j in pairs
+    )
+
+
+def crossing_flags(n_sections, crossings):
+    """Per section, True if it is part of at least one crossing.
+
+    Raises:
+        ValueError: if a crossing refers to a section index outside ``range(n_sections)``.
+    """
+    flags = [False] * n_sections
+    for c in crossings:
+        _check_index(c, n_sections)
+        flags[c.first] = flags[c.second] = True
+    return tuple(flags)
+
+
+def drop_crossing_sections(section_lines):
+    """Remove crossing sections greedily, in input order.
+
+    A section is kept if it crosses none of the sections already kept, so of two crossing
+    sections the earlier one (lower chainage along the axis) is kept.
+
+    Returns:
+        (kept, dropped): tuples of section indices, in input order.
+
+    Raises:
+        ValueError: if a section line is not valid.
+    """
+    lines = _section_lines(section_lines)
+    neighbours = [set() for _ in lines]
+    for c in find_crossings(lines):
+        neighbours[c.first].add(c.second)
+        neighbours[c.second].add(c.first)
+    kept, dropped = [], []
+    kept_set = set()
+    for i in range(len(lines)):
+        if neighbours[i] & kept_set:
+            dropped.append(i)
+        else:
+            kept.append(i)
+            kept_set.add(i)
+    return tuple(kept), tuple(dropped)
+
+
+def crossings_inside_banks(section_lines, crossings, bank_intervals):
+    """Per section, True if one of its crossings falls between bankfull banks.
+
+    For each crossing point, the distance along each of the two sections from its first
+    vertex (as the section distances of the bankfull detection) is compared with that
+    section's bank interval ``[left, right]`` (closed). If the point lies inside the
+    interval of at least one of the two sections, both are flagged. Only such crossings
+    can make the channel polygon invalid.
+
+    Args:
+        section_lines: as in ``find_crossings``.
+        crossings: Crossing results of ``find_crossings`` on the same lines.
+        bank_intervals: one entry per section: (left, right) bank distances, or None for a
+            section without bankfull.
+
+    Returns:
+        Tuple of bool, one per section.
+
+    Raises:
+        ValueError: on invalid lines or intervals, or crossing indices out of range.
+    """
+    lines = _section_lines(section_lines)
+    intervals = list(bank_intervals)
+    if len(intervals) != len(lines):
+        raise ValueError(
+            f"bank_intervals must have one entry per section ({len(lines)}), "
+            f"got {len(intervals)}"
+        )
+    intervals = [_interval(iv, k) for k, iv in enumerate(intervals)]
+    flags = [False] * len(lines)
+    for c in crossings:
+        _check_index(c, len(lines))
+        if any(_inside(lines[k], intervals[k], p)
+               for p in c.points for k in (c.first, c.second)):
+            flags[c.first] = flags[c.second] = True
+    return tuple(flags)
+
+
+def _section_lines(section_lines):
+    return [_as_section_line(obj, i) for i, obj in enumerate(section_lines)]
+
+
+def _as_section_line(obj, i):
+    if isinstance(obj, Section):
+        obj = obj.coords
+    if isinstance(obj, BaseGeometry):
+        line = obj
+    else:
+        try:
+            line = LineString(obj)
+        except (TypeError, ValueError, AttributeError, shapely.errors.ShapelyError) as exc:
+            raise ValueError(f"section {i}: not a sequence of (x, y) coordinates: "
+                             f"{exc}") from exc
+    if line.geom_type != "LineString":
+        raise ValueError(f"section {i}: must be a LineString, got {line.geom_type}")
+    if line.is_empty or line.length == 0:
+        raise ValueError(f"section {i}: empty or zero-length line")
+    return shapely.force_2d(line)
+
+
+def _points(geom):
+    """(x, y) points of an intersection result."""
+    if geom.is_empty:
+        return []
+    if geom.geom_type == "Point":
+        return [(float(geom.x), float(geom.y))]
+    if geom.geom_type in ("LineString", "LinearRing"):
+        return [(float(x), float(y)) for x, y in geom.coords]
+    out = []
+    for part in geom.geoms:
+        out += _points(part)
+    return list(dict.fromkeys(out))
+
+
+def _check_index(crossing, n):
+    if not (0 <= crossing.first < n and 0 <= crossing.second < n):
+        raise ValueError(
+            f"crossing ({crossing.first}, {crossing.second}) refers to a section index "
+            f"out of range for {n} sections"
+        )
+
+
+def _interval(iv, k):
+    if iv is None:
+        return None
+    left, right = iv
+    if not (_is_real(left) and _is_real(right)
+            and math.isfinite(left) and math.isfinite(right)):
+        raise ValueError(f"bank interval of section {k} must be finite numbers, got {iv!r}")
+    if left > right:
+        raise ValueError(f"bank interval of section {k}: left ({left!r}) > right ({right!r})")
+    return float(left), float(right)
+
+
+def _inside(line, interval, point):
+    if interval is None:
+        return False
+    d = line.project(shapely.Point(point))
+    return interval[0] <= d <= interval[1]
 
 
 def _is_real(value):

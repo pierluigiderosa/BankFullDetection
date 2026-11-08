@@ -17,7 +17,15 @@ from .options import (
     SELECTION_MODES,
     BankfullOptions,
 )
-from .sections import Section, generate_sections
+from .sections import (
+    Crossing,
+    Section,
+    crossing_flags,
+    crossings_inside_banks,
+    drop_crossing_sections,
+    find_crossings,
+    generate_sections,
+)
 from .smoothing import (
     STATUS_NO_MAX_GE_MIN,
     STATUS_NO_MAXIMA,
@@ -45,6 +53,7 @@ __all__ = [
     "BankfullOptions",
     "CVTable",
     "ChannelPolygon",
+    "Crossing",
     "HydraulicCurve",
     "InvalidSectionError",
     "Section",
@@ -53,7 +62,11 @@ __all__ = [
     "bank_geometry",
     "channel_polygon",
     "compute_bankfull_level",
+    "crossing_flags",
+    "crossings_inside_banks",
     "detect_bankfull",
+    "drop_crossing_sections",
+    "find_crossings",
     "fit_smoothing_spline",
     "folds_from_labels",
     "generate_sections",
