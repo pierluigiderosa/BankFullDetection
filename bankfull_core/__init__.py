@@ -17,6 +17,7 @@ from .options import (
     SELECTION_MODES,
     BankfullOptions,
 )
+from .sampling import NoDataError, SampledSection, stations, trim_nodata
 from .sections import (
     Crossing,
     Section,
@@ -56,6 +57,8 @@ __all__ = [
     "Crossing",
     "HydraulicCurve",
     "InvalidSectionError",
+    "NoDataError",
+    "SampledSection",
     "Section",
     "SmoothingResult",
     "SmoothingSpline",
@@ -73,4 +76,6 @@ __all__ = [
     "hydraulic_curve",
     "make_folds",
     "smooth_curve",
+    "stations",
+    "trim_nodata",
 ]
