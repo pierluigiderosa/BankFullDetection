@@ -1,9 +1,9 @@
 source_file,section_id,z_expert_low,z_expert_high,note
-arno.csv,1,,15.06,
+arno.csv,1,15.06,15.06,
 arno.csv,2,13.54,17.9,"la sezione interseca un fosso laterale (futuro affluente dell’Arno) tra 100 e 130 m; bankfull riferito all’alveo principale"
-arno.csv,3,,17.5,"nessun gradino interno evidente; piana dietro argine destro a ~15 m (480-720 m); piccolo fosso in sinistra a ~55 m (fondo ~15,6)"
-arno.csv,5,,17.7,
+arno.csv,3,17.59,17.59,"nessun gradino interno evidente; piana dietro argine destro a ~15 m (480-720 m); piccolo fosso in sinistra a ~55 m (fondo ~15,6)"
+arno.csv,5,17.7,17.7,
 arno.csv,6,12.6,18,
-arno.csv,7,14.3,16.9,la sezione ha sulla destra un argine ed oltre l'argine inizia una pianura ad una quota di 15.9 circa quindi il calcolo potrebbe essere influenzato ma la bankfull deve essere vicina alla quota che ti ho dato io
+arno.csv,7,14.3,16.9,"argine in destra; oltre l’argine piana a ~15,9 m: con “original” il calcolo può fermarsi sotto 15,9"
 arno.csv,8,12.66,17.8,
 arno.csv,9,15.19,17.4,"gradino stretto in sinistra a ~15,2 m (185-188 m) e altro minore a ~13,2; piana dietro argine destro a ~15,2 m (380-450 m), stessa quota del gradino: effetti non distinguibili con “original”"
