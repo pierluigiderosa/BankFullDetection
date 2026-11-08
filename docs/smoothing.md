@@ -116,10 +116,16 @@ Median level over seeds 0–10 against `z_expert_high` (8 sections):
 
 | Options | Mean error [m] | MAE [m] | RMSE [m] | Within 0.5 m | Mean seed range [m] |
 |---|---|---|---|---|---|
-| Default (original / min_cv / first) | −3.015 | 3.015 | 3.321 | 1 / 8 | 0.022 |
-| Recommended (thalweg / min_cv / highest) | −0.127 | 0.217 | 0.272 | 7 / 8 | 0.254 |
+| Default (original / min_cv / 1.0 / first) | −3.397 | 3.397 | 3.518 | 0 / 8 | 0.022 |
+| Recommended (thalweg / min_cv / highest) | −0.508 | 0.508 | 0.981 | 6 / 8 | 0.254 |
+
+The largest error of the recommended options is Arno 1 (−2.69 m). This section has a low inner
+floodplain on the left at 15.2–15.5 m: the method picks the bank top of the active channel at
+15.4 m, close to `z_expert_low` (15.71 m).
 
 `min_hyd_depth` (0.2–3.0) does not change the recommended result on these sections.
+These values come from `docs/confronto-opzioni.md`. If the expert estimates change, regenerate
+them with `analysis/compare_expert.py`.
 
 Physical reason: on the Arno the floodplains behind the levees lie below the bank tops. With
 `multichannel="original"` their wet polygons enter A and W as soon as they flood, A/W drops, and
@@ -127,8 +133,8 @@ on most sections the first maximum falls a few cm below the level at which a new
 opens (wet-polygon diagnostics in `docs/confronto-opzioni.md`; not on Arno 7 and 8). `"thalweg"` keeps only the main-channel polygon, and `"highest"`
 then picks the bank top of the main channel instead of the first, lower maximum.
 
-Against `z_expert_low` (lower bank edge) the recommended options do worse (MAE 2.374 m, 3 / 8
-within 0.5 m; best there is thalweg / min_cv / first, MAE 0.470 m): they target the bank-top
+Against `z_expert_low` (lower bank edge) the recommended options do worse (MAE 2.365 m, 3 / 8
+within 0.5 m; best there is thalweg / min_cv / first, MAE 0.461 m): they target the bank-top
 interpretation. Only 8 sections: the result is indicative, not a calibration.
 
 Seed variability: with the original options the level changes by about 2 cm between seeds, with
