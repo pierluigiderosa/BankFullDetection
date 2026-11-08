@@ -17,6 +17,7 @@ from .options import (
     SELECTION_MODES,
     BankfullOptions,
 )
+from .sections import Section, generate_sections
 from .smoothing import (
     STATUS_NO_MAX_GE_MIN,
     STATUS_NO_MAXIMA,
@@ -46,6 +47,7 @@ __all__ = [
     "ChannelPolygon",
     "HydraulicCurve",
     "InvalidSectionError",
+    "Section",
     "SmoothingResult",
     "SmoothingSpline",
     "bank_geometry",
@@ -54,6 +56,7 @@ __all__ = [
     "detect_bankfull",
     "fit_smoothing_spline",
     "folds_from_labels",
+    "generate_sections",
     "hydraulic_curve",
     "make_folds",
     "smooth_curve",
