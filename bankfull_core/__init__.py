@@ -1,5 +1,13 @@
 """Pure Python core of BankFullDetection (no QGIS, no R)."""
 
+from .detection import (
+    BankfullDetection,
+    BankGeometry,
+    ChannelPolygon,
+    bank_geometry,
+    channel_polygon,
+    detect_bankfull,
+)
 from .hydraulics import HydraulicCurve, InvalidSectionError, hydraulic_curve
 from .level import BankfullLevel, compute_bankfull_level
 from .options import (
@@ -30,14 +38,20 @@ __all__ = [
     "STATUS_NO_MAXIMA",
     "STATUS_NO_MAX_GE_MIN",
     "STATUS_OK",
+    "BankGeometry",
+    "BankfullDetection",
     "BankfullLevel",
     "BankfullOptions",
     "CVTable",
+    "ChannelPolygon",
     "HydraulicCurve",
     "InvalidSectionError",
     "SmoothingResult",
     "SmoothingSpline",
+    "bank_geometry",
+    "channel_polygon",
     "compute_bankfull_level",
+    "detect_bankfull",
     "fit_smoothing_spline",
     "folds_from_labels",
     "hydraulic_curve",
