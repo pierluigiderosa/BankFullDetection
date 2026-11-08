@@ -1,0 +1,7 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff.lint.per-file-ignores]
+# The plugin folder name (BankFullDetection) is imposed by QGIS and is not snake_case.
+"**/__init__.py" = ["N999"]
