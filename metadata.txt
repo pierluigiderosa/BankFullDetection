@@ -4,8 +4,10 @@ qgisMinimumVersion=3.34
 qgisMaximumVersion=3.99
 description=Automatic bankfull level and width detection from DTM cross-sections
 about=Detects the bankfull level of river cross-sections sampled from a DTM with the
-    maximum hydraulic depth method (A/W) of De Rosa et al. (2019), ISPRS International
-    Journal of Geo-Information 8(11):480. The A/W curve is smoothed with a cross-validated smoothing
+    maximum hydraulic depth method (A/W) described in: De Rosa, P., Fredduzzi, A.,
+    Cencetti, C. (2019). A GIS-based tool for automatic bankfull detection from airborne
+    high resolution DEM. ISPRS International Journal of Geo-Information, 8(11), 480.
+    https://doi.org/10.3390/ijgi8110480. The A/W curve is smoothed with a cross-validated smoothing
     spline in pure Python (numpy/scipy): R and rpy2 are no longer needed. The optional
     "thalweg" handling of multiple wet polygons follows an idea of HydXS (Garber and
     Thompson 2024, Water Resources Research, doi 10.1029/2023WR035269).
