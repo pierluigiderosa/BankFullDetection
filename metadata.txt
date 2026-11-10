@@ -12,11 +12,12 @@ about=Detects the bankfull level of river cross-sections sampled from a DTM with
     "thalweg" handling of multiple wet polygons follows an idea of HydXS (Garber and
     Thompson 2024, Water Resources Research, doi 10.1029/2023WR035269).
     The tools are available as Processing algorithms.
-version=2.0.0
+version=2.0.1
 author=Pierluigi De Rosa
 email=pierluigi.derosa@gmail.com
 
-changelog=2.0.0 Port to QGIS 3.34+ without R: pure Python core, Processing provider,
+changelog=2.0.1 Add LICENSE file (GPL-2.0-or-later) for the QGIS plugin repository.
+    2.0.0 Port to QGIS 3.34+ without R: pure Python core, Processing provider,
     legacy dialog removed.
     1.0 Original QGIS 2 version (R/rpy2), kept in the legacy-qgis2 branch.
 
